@@ -1,30 +1,30 @@
 #########################################################
-Fichier d'aide pour utiliser le site "serial-critique"
-Cours de BDW - Bases de données et programmation web
+Help file for using the "serial-critical" site
+BDW course - Databases and web programming
 Fabien Duchateau, Université Claude Bernard Lyon 1 - 2022
 #########################################################
 
 
-Pour utiliser ce site sur le serveur de l'UE (bdw.univ-lyon1.fr), quatre étapes :
+To use this site on the EU server (bdw.univ-lyon1.fr), four steps:
 
-- se connecter à PHPMyAdmin (http://bdw.univ-lyon1.fr/phpmyadmin), choisir l'onglet "importer", et importer le fichier "bd.sql". Cela doit créer les tables dans votre BD.
+- connect to PHPMyAdmin (http://bdw.univ-lyon1.fr/phpmyadmin), choose the "import" tab, and import the "bd.sql" file. This must create the tables in your comic.
 
-- éditer le fichier "inc/config-bd.php" et modifier les valeurs des constantes "UTILISATRICE", "MOTDEPASSE" et "BDD".
+- edit the file "inc/config-bd.php" and modify the values of the constants "USER", "MOTDEPASSE" and "BDD".
 
-- envoyer le répertoire "serial-critique" sur le serveur (soit avec scp ou rsync en ligne de commande, soit avec un outil graphique comme FileZilla).
+- send the "serial-critical" directory to the server (either with scp or rsync in command line, or with a graphical tool like FileZilla).
 
-- ouvrir un navigateur et saisir l'url http://bdw.univ-lyon1.fr/p1234567/serial-critique/
+- open a browser and enter the url http://bdw.univ-lyon1.en/p1234567/serial-critique/
 
 
 =========================================================
 
 
-Pour utiliser ce site EN LOCAL (sur votre machine avec XAMPP ou équivalent), quatre étapes :
+To use this site LOCALLY (on your machine with XAMPP or equivalent), four steps:
 
-- se connecter à PHPMyAdmin (par ex, http://localhost/phpmyadmin), choisir l'onglet "importer", et importer le fichier "bd.sql". Cela doit créer les tables dans votre BD.
+- connect to PHPMyAdmin (e.g., http://localhost/phpmyadmin), choose the "import" tab, and import the "bd.sql" file. This must create the tables in your comic.
 
-- éditer le fichier "inc/config-bd.php" et modifier les valeurs des constantes "UTILISATRICE", "MOTDEPASSE" et "BDD".
+- edit the file "inc/config-bd.php" and modify the values of the constants "USER", "MOTDEPASSE" and "BDD".
 
-- déplacer le répertoire "serial-critique" dans le répertoire public de XAMPP (généralement "xampp/htdocs/").
+- Move the "serial-critical" directory to the XAMPP public directory (usually "xampp/htdocs/").
 
-- ouvrir un navigateur et saisir l'url http://localhost/serial-critique/
+- open a browser and enter http://localhost/serial-critique/
