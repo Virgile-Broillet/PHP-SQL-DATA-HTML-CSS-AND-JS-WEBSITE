@@ -401,5 +401,20 @@ p:before {
   margin-right: 7em;
   width: 692px;
 }
+/* STYLE DES TABLEAUX */
+
+table {
+  border: 1px solid black;
+  font: 16px "Open Sans", Helvetica, Arial, sans-serif;
+}
+
+thead > tr {
+  background-color: rgb(228, 240, 245);
+}
+
+th, td {
+  border: 1px solid black;
+  padding:4px 6px;
+}
 
 /* FIN PAGE REMERCIEMENTS */

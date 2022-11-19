@@ -17,7 +17,7 @@ h2{
 			<label for="nomchanson"></label>
 			<div class="gauche"><p type="Nom de la Chanson :"> <input class="bb" type="text" name="nomchanson" id="nomchanson" placeholder="Mega Disco Giga Disto" required /></div></p>
 			<div class="droite"><p type="Date de Sortie de la Chanson :"> <input class="bb" type="number" name="date" id="date" placeholder="2022" min="1950" max="2022" required/></div></p></br>
-			<div class="gauche"><p type="Durée de la Chanson :"> <input class="bb" type="number" name="durée" id="durée" placeholder="244 means 244 secondes, 4m06s" min="1" required /></div></p>
+			<div class="gauche"><p type="Durée de la Chanson :"> <input class="bb" type="number" name="durée" id="durée" placeholder="244 means 244 seconds, 4m06s" min="1" required /></div></p>
 			<div class="droite"><p type="Chemin du fichier de la chanson :"> <input class="bb" type="text" name="chemin" id="chemin" placeholder="E:/.../....mp3 or https://..." required/></div></p></br>
 
 			</br></br></br></br></br></br></br>
@@ -63,7 +63,7 @@ h2{
 
 			<div class="droite">
 				<p type="Numéro de Piste">
-					<input class="bb" type="number" name="numero_piste" id="numero_piste" placeholder='0 pour "ne sait pas"' min="0" max="40" required/>
+					<input class="bb" type="number" name="numero_piste" id="numero_piste" placeholder="0 If You Don't Know" min="0" max="40" required/>
 				</p>
 			</div>
 

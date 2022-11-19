@@ -108,10 +108,13 @@ function get_idGE_By_nomGE($connexion, $nomGenre) {
 	return $res;
 }
 
-function Is_nomGE_exists($connexion, $nomGroupe) { 
+function Is_nomG_exists($connexion, $nomGroupe) { 
 	$requete = "SELECT nomG FROM GROUPE WHERE nomg LIKE "."\"$nomGroupe\"".";";
-	$prepare=mysqli_prepare($connexion,$requete);
-	$res = mysqli_stmt_execute($prepare);
+	$prepare = mysqli_query($connexion, $requete);
+	while($row=mysqli_fetch_assoc($prepare))
+	{
+		$res = $row['nomG'];
+	}
 	return $res;
 }
 
@@ -220,6 +223,11 @@ function get_Last_Id_PLAYLIST($connexion)
 	}
 	$idAfter = $res + 1;
 	return $idAfter;
+}
+
+function nom_aléatoire_dans_une_table($connexion, $nomTable)
+{
+	
 }
 
 function insertPosseder($connexion, $idc, $idGE) {

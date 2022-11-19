@@ -39,12 +39,12 @@ if($poss == null || count($poss) == 0) {
 
 
 		insertSong($connexion, $titre, $idc, $année, $compil, 'Original', $idA, $track);
-		$is_grp_exist = Is_nomGE_exists($connexion, $nom);
+		$is_grp_exist = Is_nomG_exists($connexion, $nom);
 
 		insertAlbum($connexion, $idA, $album, $année, 'Unknown');
 		$idA++;
 
-		if($is_grp_exist = 1)
+		if($is_grp_exist != $nom)
 		{
 			insertGroup($connexion, $nom, $idG, $année);
 			insertGenre($connexion, $idG, $nomGE);
@@ -57,7 +57,6 @@ if($poss == null || count($poss) == 0) {
 		{	
 			$idGexist=get_idG_By_nomGroupe($connexion, $nom);
 
-			insertGroup($connexion, $nom, $idGexist, $année);
 			insertGenre($connexion, $idGexist, $nomGE);
 			insertPosseder($connexion, $idc, $idGexist);
 			insertVersion($connexion, $idc, $nV, $année, $chemin, $durée);

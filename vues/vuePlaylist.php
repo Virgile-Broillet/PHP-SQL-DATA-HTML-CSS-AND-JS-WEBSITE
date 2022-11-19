@@ -11,13 +11,31 @@ h2{
 </style>
 
 <center>
+	
+	<table>
+	<tr>
+	 <th> identifiant </th>
+     <th> titre de la Playlist </th>
+     <th> Date de création </th>
+    </tr>
+
+	<?php foreach($playlist as $play) { ?>
+	<tr>
+		<td><?= $play['idLEC'] ?></td>
+		<td><?= $play['titreLEC'] ?> </td>
+		<td><?= $play['dateLEC'] ?> </td>
+	</tr>
+	<?php } ?>
+	</table>
+
+
 	<div class="formulaire">
 		<h2> Création d'Une Playlist Aléatoire</h2>
 		<form method="post" action="#">
 			<label for="nomchanson"></label>
 			
 			<div class="gauche"><p type="Durée de la Playlist en minutes :"> <input class="bb" type="number" name="duréePlaylist" id="durée en minutes" placeholder="20" min="4" required /></div></p>
-			<div class="droite"><p type="Nom de votre Playlist :"> <input class="bb" type="text" name="nomPlaylist" id="nomPlaylist" placeholder="Les musiques de Tchoupi" require ></div></p></br>
+			<div class="droite"><p type="Nom de votre Playlist :"> <input class="bb" type="text" name="nomPlaylist" id="nomPlaylist" placeholder="Les musiques de Tchoupi" ></div></p></br>
 			
 			</br></br></br></br></br>
 
