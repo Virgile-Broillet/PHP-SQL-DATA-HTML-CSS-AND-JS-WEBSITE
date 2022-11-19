@@ -1,0 +1,405 @@
+body {
+  background-color: #f2f2f2;
+}
+
+header,
+nav,
+main,
+footer {
+  padding: 1em 0;
+}
+/* HEADRER */
+header {
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  border-radius: 0.3rem;
+  background-size: cover !important;
+  color: #fff;
+}
+
+.container_header {
+  width: 100%;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center !important;
+}
+
+h1 {
+  display: block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+
+.logo {
+  float: left;
+  margin-left: 1rem;
+  margin-top: -1rem;
+}
+
+img {
+  border-radius: 10%;
+}
+
+/* FIN HEADER */
+
+/* FOOTER */
+
+.footer {
+  background: #f2f2f2;
+  font-family: "Play", sans-serif;
+  text-align: center;
+}
+
+.footer .row {
+  width: 100%;
+  margin: 1% 0%;
+  margin-left: 4%;
+  padding: 0.6% 0%;
+  color: grey;
+  font-size: 0.8em;
+}
+
+.footer .row a {
+  text-decoration: none;
+  color: gray;
+  transition: 0.5s;
+}
+
+.footer .row a:hover {
+  color: black;
+}
+
+.footer .row ul {
+  width: 100%;
+}
+
+.footer .row ul li {
+  display: inline-block;
+  margin: 0px 30px;
+}
+
+.footer .row a i {
+  font-size: 2em;
+  margin: 0% 1%;
+}
+
+/* FIN FOOTER */
+
+/* COMPTEUR */
+
+.texte-complet {
+  width: 400px;
+  height: auto;
+  background: #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 0 40px -10px #000;
+  margin: 0.5em;
+  padding: 20px 30px;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+}
+
+.menu-compteur {
+  text-align: center;
+}
+
+h4 {
+  margin: 10px 0;
+  padding-bottom: 5px;
+  width: 300px;
+  color: #78788c;
+  border-bottom: 3px solid #78788c;
+  font-size: 1em;
+}
+
+h5 {
+  margin: 10px 0;
+  padding-bottom: 5px;
+  width: 300px;
+  color: black;
+  font-size: 1em;
+}
+
+/* FIN COMPTEUR */
+
+/* CAROUSEL */
+
+.selection {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #f2f2f2;
+}
+
+#wrapper {
+  padding: 15px;
+  width: 100%;
+  max-width: 61.2em;
+  position: relative;
+}
+
+#carousel {
+  overflow: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+#carousel::-webkit-scrollbar {
+  height: 0;
+}
+
+#prev,
+#next {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  background: white;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  outline: 0;
+  cursor: pointer;
+  position: absolute;
+}
+
+#prev {
+  top: 50%;
+  left: 0;
+  transform: translate(50%, -50%);
+  display: none;
+}
+
+#next {
+  top: 50%;
+  right: 0;
+  transform: translate(-50%, -50%);
+}
+
+#content {
+  display: grid;
+  align-items: center;
+  grid-gap: 16px;
+  grid-auto-flow: column;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.item {
+  width: 180px;
+  height: 180px;
+  background: green;
+}
+
+h3 {
+  display: block;
+  font-size: 2em;
+  margin-block-start: 0.67em;
+  margin-block-end: 0.67em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+}
+
+/* FIN CAROUSEL */
+
+#divCentral {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  margin: auto;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+main {
+  flex: 10;
+  background-color: #f2f2f2;
+}
+
+/* MENU */
+
+.vertical-menu {
+  width: 200px;
+  height: auto;
+}
+
+.vertical-menu a {
+  background-color: #f2f2f2;
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+}
+
+.vertical-menu a.active {
+  background-color: #018152;
+  color: white;
+}
+
+/* FIN MENU */
+
+/* FORMULAIRE ADD */
+
+.formulaire {
+  width: 800px;
+  height: auto;
+  background: #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 0 40px -10px #000;
+  margin-top: 3em;
+  padding: 20px 30px;
+  max-width: calc(100vw - 80px);
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+}
+
+h2 {
+  margin: 10px 0;
+  padding-bottom: 10px;
+  width: auto;
+  color: #78788c;
+  border-bottom: 3px solid #78788c;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: none;
+  outline: none;
+  resize: none;
+  border: 0;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.3s;
+}
+
+.bb {
+  border-bottom: 2px solid #bebed2;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: none;
+  outline: none;
+  resize: none;
+  border: 0;
+  font-family: "Montserrat", sans-serif;
+  transition: all 0.3s;
+  border-bottom: 2px solid #bebed2;
+}
+
+input:focus {
+  border-bottom: 2px solid #78788c;
+}
+
+select:focus {
+  border-bottom: 2px solid #78788c;
+}
+
+p:before {
+  content: attr(type);
+  display: block;
+  margin: 28px 0 0;
+  font-size: 14px;
+  color: #5a5a5a;
+}
+
+.button {
+  align-items: center;
+  padding: 8px 12px;
+  margin: 8px 0 0;
+  font-family: "Montserrat", sans-serif;
+  border: 2px solid #78788c;
+  background: 0;
+  color: #5a5a6e;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.button:hover {
+  background: #78788c;
+  color: #fff;
+}
+
+.gauche {
+  text-align: left;
+  float: left;
+  width: 45%;
+}
+
+.droite {
+  text-align: right;
+  float: right;
+  width: 45%;
+}
+
+/* FIN FORMULAIRE ADD */
+
+/* PAGE REMERCIEMENTS */
+
+.bloc {
+  width: 33.3333333%;
+  padding-bottom: 40px;
+  box-sizing: border-box;
+  flex-basis: 33.3333333%;
+  max-width: 33.3333333%;
+}
+
+.title-config {
+  text-align: left;
+  margin-top: 28px;
+  font-size: 28px;
+  line-height: 1.1428;
+  font-weight: 600;
+  letter-spacing: 0.007em;
+}
+
+.Desc {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin: 0 0 1em 0;
+  font-size: 17px;
+  line-height: 1.4705;
+  letter-spacing: -0.022em;
+  font-family: Helvetica;
+  color: #1d1d1f;
+  font-style: normal;
+}
+
+.right {
+  text-align: left;
+  margin-left: -8.3333333%;
+}
+
+.link {
+  color: #06c;
+  letter-spacing: inherit;
+}
+
+.section-content {
+  margin-left: 7em;
+  margin-right: 7em;
+  width: 692px;
+}
+
+/* FIN PAGE REMERCIEMENTS */
