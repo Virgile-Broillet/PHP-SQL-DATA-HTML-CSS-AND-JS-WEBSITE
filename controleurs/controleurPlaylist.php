@@ -2,30 +2,29 @@
 $connexion = getConnexionBD(); // connexion à la BD
 
 // recuperation des Playlists
-$playlist = getInstances($connexion, "LISTE_DE_LECTURE");
-if($playlist == null || count($playlist) == 0) {
+$playlist = getInstances($connexion, "`LISTE_DE_LECTURE`");
+if($playlist == null || count($playlist) == 0)
+ {
 	$message .= "Aucune Playlist n'a été trouvée dans la base de données !"; 
-}
+ }
 
-
-if(isset($_POST['boutonValider'])) {
-
+if(isset($_POST['boutonValider']))
+ {
 	$titreLec = $_POST['nomPlaylist'];
 	$temps = $_POST['duréePlaylist'];
 	$nomGenre = $_POST['genre1'];
 
 	$durée = $temps*60;
-
 	
 	if(empty($_POST['nomPlaylist']))
 	{
-		do{
-	$nom1 = nom_aléatoire_dans_une_table($connexion, "GROUPE");
-	$nom2 = nom_aléatoire_dans_une_table($connexion, "GENRE");
-	$nom3 = nom_aléatoire_dans_une_table($connexion, "CHANSON");
+		//do{
+	$nom1 = nom_aleatoire_dans_une_table($connexion, "`GROUPE`");
+	$nom2 = nom_aleatoire_dans_une_table($connexion, "`GENRE`");
+	$nom3 = nom_aleatoire_dans_une_table($connexion, "`CHANSON`");
 	$titreLec = $nom1." ".$nom2." ".$nom3;
 	$verification=getPlaylistByName($connexion, $titreLec);
-	   }while($verification == TRUE)
+	   //}while($verification == TRUE);
 	}
 		
 	$verification=getPlaylistByName($connexion, $titreLec);
@@ -48,5 +47,6 @@ if(isset($_POST['boutonValider'])) {
 	else {
 		$message = "Une Playlist existe déjà avec ce nom ($titreLec).";
 	}
-}
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=playlist#'>";
+ }
 ?>

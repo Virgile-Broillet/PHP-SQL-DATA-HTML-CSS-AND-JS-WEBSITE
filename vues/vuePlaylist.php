@@ -9,7 +9,9 @@ h2{
 	width:20em;
 }
 </style>
-
+<?php
+echo nom_aleatoire_dans_une_table($connexion, "`GROUPE`", "nomG");
+?>
 <center>
 	
 	<table>
@@ -19,14 +21,14 @@ h2{
      <th> Date de création </th>
     </tr>
 
-	<?php foreach($playlist as $play) { ?>
-	<tr>
-		<td><?= $play['idLEC'] ?></td>
-		<td><?= $play['titreLEC'] ?> </td>
-		<td><?= $play['dateLEC'] ?> </td>
-	</tr>
-	<?php } ?>
-	</table>
+<?php foreach($playlist as $playlist) { ?>
+   <tr>
+	<td><?= $playlist['idLec'] ?></td>
+	<td><?= $playlist['titreLec'] ?> </td>
+	<td><?= $playlist['dateLec'] ?> </td>
+   </tr>
+<?php } ?>
+</table>
 
 
 	<div class="formulaire">

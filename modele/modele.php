@@ -225,11 +225,6 @@ function get_Last_Id_PLAYLIST($connexion)
 	return $idAfter;
 }
 
-function nom_aléatoire_dans_une_table($connexion, $nomTable)
-{
-	
-}
-
 function insertPosseder($connexion, $idc, $idGE) {
 	
 	$requete="INSERT INTO POSSÉDER VALUES($idc, $idGE);";
@@ -276,7 +271,6 @@ function search($connexion, $nomChanson) {
 	return $instances;
 }
 
-/* 
 
 // fonction pour obtenir les n plus grandes/petites valeurs
 function max_limit($connexion, $table, $param_OUT, $param_IN, $limite, $ordre){
@@ -287,7 +281,16 @@ function max_limit($connexion, $table, $param_OUT, $param_IN, $limite, $ordre){
 	return $instances;		
 }
 
-*/
+// fonction pour récupérer un mot => creer le nom de la playlist
+function nom_aleatoire_dans_une_table($connexion, $table, $nom) {
+    $requete1 ="SELECT '.$nom.' FROM '.$table.' ORDER BY RAND() LIMIT 1 ";
+    $res=mysqli_query($connexion,$requete1);
+   // $noms=explode(",", $res);
+   // $max = count($noms)-1;
+   // $nom1=$noms[rand( 0, $max)]; // nom à indice entr 0 et la longueur de la chaîne - 1
+	return $res; // retourne 1 seul mot
+
+} 
 
 function insertPlaylist($connexion, $idLec, $titreLec)
 {
