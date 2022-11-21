@@ -4,18 +4,34 @@
 
 <?php error_reporting(0); ?>
 
-
-<h2>Liste des Groupes :</h2>
-<ul>
+<table>
+	<h2>Liste des Groupes :</h2>
+	<tr>
+		<th> Identifiant :</th>
+		<th> Nom du Groupe :</th>
+	</tr>
+		
 <?php foreach($groupe as $groupe) { ?>
-	<li><?= $groupe['nomG'] ?></li>
+   <tr>
+	<td><?= $groupe['idG'] ?></td>
+	<td><?= $groupe['nomG'] ?> </td>
+	
+   </tr>
 <?php } ?>
-</ul>
+</table>
 
 <h2>Liste des Genres :</h2>
-<ul>
+<table>
 <?php foreach($genre as $genre) { ?>
-	<li><?= $genre['nom_genre'] ?></li>
+	 <tr>
+	<td><?= $genre['idGE'] ?></td>
+	<?php 
+	$mot = explode("; ", $genre['nom_genre']);
+	foreach($mot as $mot) {
+	?>
+	<td><?= $mot?></td>
+	<?php } ?>
+	 </tr>
 <?php } ?>
-</ul>
+</table>
 

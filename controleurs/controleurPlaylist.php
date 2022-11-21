@@ -19,9 +19,9 @@ if(isset($_POST['boutonValider']))
 	if(empty($_POST['nomPlaylist']))
 	{
 		//do{
-	$nom1 = nom_aleatoire_dans_une_table($connexion, "`GROUPE`");
-	$nom2 = nom_aleatoire_dans_une_table($connexion, "`GENRE`");
-	$nom3 = nom_aleatoire_dans_une_table($connexion, "`CHANSON`");
+	$nom1 = nom_aléatoire_dans_une_table($connexion, "GROUPE", " ");
+	$nom2 = nom_aléatoire_dans_une_table($connexion, "GENRE", "; ");
+	$nom3 = nom_aléatoire_dans_une_table($connexion, "CHANSON", " ");
 	$titreLec = $nom1." ".$nom2." ".$nom3;
 	$verification=getPlaylistByName($connexion, $titreLec);
 	   //}while($verification == TRUE);
@@ -49,4 +49,13 @@ if(isset($_POST['boutonValider']))
 	}
 	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=playlist#'>";
  }
+ 
+ if(isset($_POST['boutonValider2'])) 
+	{ // formulaire 2 soumis
+	$identifiant = $_POST['champRech2']; //recuperation id
+	$rep2 =  delete_ligne($connexion, $identifiant, "`LISTE_DE_LECTURE`", "titreLec") ;
+	// on supprime la ligne correspondant au nom idLEC;
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=playlist#'>";
+	}
+ 
 ?>

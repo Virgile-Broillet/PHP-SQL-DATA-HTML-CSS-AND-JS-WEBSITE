@@ -11,6 +11,7 @@ h2{
 </style>
 
 <center>
+
 	<div class="formulaire">
 		<h2>Rechercher Les informations d'Une Chanson</h2>
 		</br>
@@ -29,21 +30,16 @@ h2{
 </center>
 
 <article>
-	<?php if(isset($message)) { ?>
-		<p style="background-color: yellow;"><?= $message ?></p>
-	<?php } ?>
-	<?php if(isset($resultats)) { ?>	
-		<ul>
-		<?php 
-			foreach($resultats as $instance) {  // nombre d'attributs variable dans les résultats (selon la table)
-				echo '<li>';
-				foreach($instance as $valeur)  // affichage de chaque valeur (correspondant à chaque attribut)
-					echo $valeur . ' ';
-				echo '</li>';
-			}
-		?>
-		</ul>
-	<?php } ?>
+    <?php if(isset($message)) { ?>
+        <p style="background-color: yellow;"><?= $message ?></p>
+    <?php } ?>
+    <?php if(isset($resultats)) { ?>
+        <ul>
+        <?php
+            foreach($resultats as $instance) {  // nombre d'attributs variable dans les résultats (selon la table)
+                echo '<li>';
+            }
+        ?>
 </article>
 
 

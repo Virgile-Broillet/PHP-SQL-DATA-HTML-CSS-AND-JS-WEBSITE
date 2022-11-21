@@ -1,4 +1,4 @@
-<?php error_reporting(0); ?>
+
 
 <?php if(isset($message)) { ?>
 	<p style="background-color: yellow;"><?= $message ?></p>
@@ -21,11 +21,11 @@ echo nom_aleatoire_dans_une_table($connexion, "`GROUPE`", "nomG");
      <th> Date de création </th>
     </tr>
 
-<?php foreach($playlist as $playlist) { ?>
+<?php foreach($playlist as $playliste) { ?>
    <tr>
-	<td><?= $playlist['idLec'] ?></td>
-	<td><?= $playlist['titreLec'] ?> </td>
-	<td><?= $playlist['dateLec'] ?> </td>
+	<td><?= $playliste['idLec'] ?></td>
+	<td><?= $playliste['titreLec'] ?> </td>
+	<td><?= $playliste['dateLec'] ?> </td>
    </tr>
 <?php } ?>
 </table>
@@ -61,4 +61,17 @@ echo nom_aleatoire_dans_une_table($connexion, "`GROUPE`", "nomG");
 			<div class="button"><input type="submit" name="boutonValider" value="Ajouter"/></div>
 		</form>
 	</div>
+	
+	<div class="formulaire">
+		<h2> Supression d'Une Playlist</h2>
+		<form method="post" action="#">
+		<select name="champRech2" id="idChamp2" />
+	<?php foreach($playlist as $play) {  ?>
+		<option><?= $play['titreLec'] ?></option>
+	<?php } ?>
+		
+		<div class="button"><input type="submit" name="boutonValider2" value="Supprimer"/></div>
+		</form>
+	</div>
+	 
 </center>

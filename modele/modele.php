@@ -265,7 +265,7 @@ function insertAlbum($connexion, $idA, $titreA, $year, $producer) {
 }
 
 function search($connexion, $nomChanson) {
-	$requete = "SELECT * FROM CHANSON WHERE titreC LIKE "."\"$nomChanson\"".";";
+	$requete = "SELECT titreC, date_création, typec, nomG, date_formation FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;";
 	$res = mysqli_query($connexion, $requete);
 	$instances = mysqli_fetch_all($res, MYSQLI_ASSOC);
 	return $instances;
@@ -385,6 +385,39 @@ function GET_MOYENNE($TabDurée, $temps, $connexion, $nomGenre, $nb_ligne, $TabT
 	}
 }
 
+function nom_aléatoire_GRP($connexion, $sep) {
+    $requete ="SELECT nomG FROM GROUPE ORDER BY RAND() LIMIT 1 ";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))
+    {
+        $res=$row['nomG'];
+        $nom=explode($sep, $res);
+    }
+    return $nom;
+}
+
+function nom_aléatoire_GENRE($connexion, $sep) {
+    $requete ="SELECT nom_genre FROM GENRE ORDER BY RAND() LIMIT 1 ";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))
+    {
+        $res=$row['nom_genre'];
+        $nom=explode($sep, $res);
+    }
+    return $nom;
+}
+
+function nom_aléatoire_SONG($connexion, $sep) {
+    $requete ="SELECT titreC FROM CHANSON ORDER BY RAND() LIMIT 1 ";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))
+    {
+        $res=$row['titreC'];
+        $nom=explode($sep, $res);
+    }
+    return $nom;
+}
+
 function insertJouer_AND_insertInclure($connexion, $TabIDV, $nb_ligne, $idLec, $TabIDA, $TabNUM_PISTE)
 {
 	$i=1;
@@ -393,6 +426,14 @@ function insertJouer_AND_insertInclure($connexion, $TabIDV, $nb_ligne, $idLec, $
 		insertInclure($connexion, $idLec, $TabIDA[$i-1], $TabNUM_PISTE[$i-1]);
 		$i++;
 	}
+}
+
+//supprime une ligne d'une table
+function delete_ligne($connexion, $idtransmis, $ntable, $idtable) {
+	$requete = "DELETE FROM $ntable WHERE $idtable = $idtransmis ;";
+	$res = mysqli_query($connexion, $requete);
+	mysqli_commit($connexion);
+	return $res;
 }
 
 // selection un élément d'une table passé en paramètre
