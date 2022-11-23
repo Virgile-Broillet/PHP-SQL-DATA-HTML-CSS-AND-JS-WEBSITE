@@ -6,6 +6,7 @@
 
 <main>
 	<center>
-		<img src="img/test.gif" />
+		<h1>Alors comme ça on essaie de supprimer la BD ?</h1>
+		<img src="img/test.gif"/>
 	</center>
 </main>
