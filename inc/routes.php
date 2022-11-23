@@ -12,7 +12,8 @@ $routes = array(
 	'critique' => array('controleur' => 'controleurCritique', 'vue' => 'vueCritique'),
 	'rechercher' => array('controleur' => 'controleurRechercher', 'vue' => 'vueRechercher'),
 	'remerciements' => array('controleur' => 'controleurRemerciements', 'vue' => 'vueRemerciements'),
-    'playlist' => array('controleur' => 'controleurPlaylist', 'vue' => 'vuePlaylist')
+    'playlist' => array('controleur' => 'controleurPlaylist', 'vue' => 'vuePlaylist'),
+	'gifs' => array('controleur' => 'controleurGif', 'vue' => 'vueGif')
 );
 
 ?>

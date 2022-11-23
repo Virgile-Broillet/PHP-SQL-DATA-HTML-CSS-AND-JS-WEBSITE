@@ -9,9 +9,7 @@ h2{
 	width:20em;
 }
 </style>
-<?php
-echo nom_aleatoire_dans_une_table($connexion, "`GROUPE`", "nomG");
-?>
+
 <center>
 	
 	<table>
@@ -64,13 +62,14 @@ echo nom_aleatoire_dans_une_table($connexion, "`GROUPE`", "nomG");
 	
 	<div class="formulaire">
 		<h2> Supression d'Une Playlist</h2>
+		</br>
 		<form method="post" action="#">
-		<select name="champRech2" id="idChamp2" />
-	<?php foreach($playlist as $play) {  ?>
-		<option><?= $play['titreLec'] ?></option>
-	<?php } ?>
-		
-		<div class="button"><input type="submit" name="boutonValider2" value="Supprimer"/></div>
+			<select name="titreL" id="titreL" >
+				<?php foreach($playlist as $playliste) {  ?>
+					<option><?= $playliste['titreLec'] ?></option>
+				<?php } ?>
+			</select></br></br>
+			<div class="button"><input type="submit" name="boutonSupp" value="Supprimer"/></div>
 		</form>
 	</div>
 	 

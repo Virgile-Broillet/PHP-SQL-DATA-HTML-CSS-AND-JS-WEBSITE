@@ -2,6 +2,18 @@
 
 error_reporting(0);
 
+function VERIF($nom) {
+	$mot_vilain = array("DROP", "drop", "Drop", "dRop", "drOp", "droP", "DRop", "DrOp", "DroP", "dROp", "dRoP", "drOp", "drOP", "dROP", "DrOP", "DRoP", "DROp");
+	$tableau = explode(' ', $nom);
+	foreach($tableau as $mot)
+	{
+		if (in_array($mot, $mot_vilain))
+		{
+			return true;
+		}else{return false;}
+	}
+}
+
 // connexion à la BD, retourne un lien de connexion
 function getConnexionBD() {
 	$connexion = mysqli_connect(SERVEUR, UTILISATRICE, MOTDEPASSE, BDD);
@@ -200,6 +212,24 @@ function insertGenre($connexion, $idG, $nom) {
 	return $res;
 }
 
+function insertPropriete($connexion, $idP, $filesize, $playcount, $lastplayed, $skipcount) {
+	if($lastplayed<0){
+		$requete="INSERT INTO PROPRIÉTÉ VALUES($idP, $filesize, $playcount, NULL, $skipcount);";
+	}else{
+		$requete="INSERT INTO PROPRIÉTÉ VALUES($idP, $filesize, $playcount, $lastplayed, $skipcount);";
+	}
+	$prepare=mysqli_prepare($connexion,$requete);
+	$res = mysqli_stmt_execute($prepare);
+	return $res;
+}
+
+function insertDécrire($connexion, $idV, $idP) {
+	$requete="INSERT INTO DÉCRIRE VALUES($idV, $idP);";
+	$prepare=mysqli_prepare($connexion,$requete);
+	$res = mysqli_stmt_execute($prepare);
+	return $res;
+}
+
 function get_Last_Id_Song($connexion)
 {
 	$requete="SELECT * FROM CHANSON";
@@ -280,17 +310,6 @@ function max_limit($connexion, $table, $param_OUT, $param_IN, $limite, $ordre){
 	$instances = mysqli_fetch_all($res, MYSQLI_ASSOC);
 	return $instances;		
 }
-
-// fonction pour récupérer un mot => creer le nom de la playlist
-function nom_aleatoire_dans_une_table($connexion, $table, $nom) {
-    $requete1 ="SELECT '.$nom.' FROM '.$table.' ORDER BY RAND() LIMIT 1 ";
-    $res=mysqli_query($connexion,$requete1);
-   // $noms=explode(",", $res);
-   // $max = count($noms)-1;
-   // $nom1=$noms[rand( 0, $max)]; // nom à indice entr 0 et la longueur de la chaîne - 1
-	return $res; // retourne 1 seul mot
-
-} 
 
 function insertPlaylist($connexion, $idLec, $titreLec)
 {
@@ -390,10 +409,10 @@ function nom_aléatoire_GRP($connexion, $sep) {
     $prepare = mysqli_query($connexion, $requete);
     while($row=mysqli_fetch_assoc($prepare))
     {
-        $res=$row['nomG'];
-        $nom=explode($sep, $res);
+        $res=$row["nomG"];
+        $nom=explode(" ", $res);
     }
-    return $nom;
+    return $res[0];
 }
 
 function nom_aléatoire_GENRE($connexion, $sep) {
@@ -401,10 +420,10 @@ function nom_aléatoire_GENRE($connexion, $sep) {
     $prepare = mysqli_query($connexion, $requete);
     while($row=mysqli_fetch_assoc($prepare))
     {
-        $res=$row['nom_genre'];
-        $nom=explode($sep, $res);
+        $res=$row["nom_genre"];
+        $nom=explode("; ", $res);
     }
-    return $nom;
+    return $nom[0];
 }
 
 function nom_aléatoire_SONG($connexion, $sep) {
@@ -412,10 +431,10 @@ function nom_aléatoire_SONG($connexion, $sep) {
     $prepare = mysqli_query($connexion, $requete);
     while($row=mysqli_fetch_assoc($prepare))
     {
-        $res=$row['titreC'];
-        $nom=explode($sep, $res);
+        $res=$row["titreC"];
+        $nom=explode(" ", $res);
     }
-    return $nom;
+    return $nom[0];
 }
 
 function insertJouer_AND_insertInclure($connexion, $TabIDV, $nb_ligne, $idLec, $TabIDA, $TabNUM_PISTE)
@@ -428,12 +447,30 @@ function insertJouer_AND_insertInclure($connexion, $TabIDV, $nb_ligne, $idLec, $
 	}
 }
 
+function get_id_By_NomPlaylist($connexion, $nom){
+	$requete = "SELECT idLec FROM LISTE_DE_LECTURE WHERE titreLec LIKE "."\"$nom\"".";";
+	$prepare = mysqli_query($connexion, $requete);
+	while($row=mysqli_fetch_assoc($prepare))
+	{
+		$res=$row['idLec'];
+	}
+	return $res;
+}
+
+
 //supprime une ligne d'une table
 function delete_ligne($connexion, $idtransmis, $ntable, $idtable) {
-	$requete = "DELETE FROM $ntable WHERE $idtable = $idtransmis ;";
+	$requete = "DELETE FROM $ntable WHERE $idtable = $idtransmis;";
 	$res = mysqli_query($connexion, $requete);
 	mysqli_commit($connexion);
 	return $res;
+}
+
+function compte_chanson_groupe($connexion) {
+	$requete ="SELECT g.idG, b.nomG, COUNT(g.idG) AS value_occurrence FROM INTERPRÉTERg natural Left join GROUPEb GROUP BY idG ORDER BY value_occurrence DESC LIMIT 5 ;";
+	$res = mysqli_query($connexion, $requete);
+	$resultat = mysqli_fetch_all($res, MYSQLI_ASSOC);
+	return $resultat;
 }
 
 // selection un élément d'une table passé en paramètre

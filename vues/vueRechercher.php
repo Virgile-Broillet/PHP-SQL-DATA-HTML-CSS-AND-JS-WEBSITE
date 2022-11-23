@@ -39,6 +39,7 @@ h2{
             foreach($resultats as $instance) {  // nombre d'attributs variable dans les résultats (selon la table)
                 echo '<li>';
             }
+		}
         ?>
 </article>
 
