@@ -11,7 +11,7 @@ if($genre == null || count($genre) == 0) {
 	$message .= "Aucun Genre n'a été trouvée dans la base de données !";
 }
 
-$songs100 = getInstances($connexion, "songs100");
+$songs100 = getInstances($connexion, "songs2000");
 if($songs100 == null || count($songs100) == 0) {
 	$message .= "Aucune BD song100";
 }

@@ -8,8 +8,8 @@ if(file_exists('../private-config-bd.php'))  // fichier de configuration "privé
 	require('../private-config-bd.php');
 else {
 	define('SERVEUR', 'localhost');
-	define('UTILISATRICE', 'p1234567'); // votre login, par exemple p1234567
-	define('MOTDEPASSE', 'Abcd12Efgh'); // votre mot de passe, par exemple Abcd12Efgh
-	define('BDD', 'p1234567'); // votre BD, par exemple p1234567	
+	define('UTILISATRICE', 'p2103804'); // votre login, par exemple p1234567
+	define('MOTDEPASSE', 'Bluish74Gazing'); // votre mot de passe, par exemple Abcd12Efgh
+	define('BDD', 'p2103804'); // votre BD, par exemple p1234567	
 }
 ?>

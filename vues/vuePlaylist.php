@@ -19,14 +19,14 @@ h2{
      <th> Date de création </th>
     </tr>
 
-<?php foreach($playlist as $playliste) { ?>
-   <tr>
-	<td><?= $playliste['idLec'] ?></td>
-	<td><?= $playliste['titreLec'] ?> </td>
-	<td><?= $playliste['dateLec'] ?> </td>
-   </tr>
-<?php } ?>
-</table>
+	<?php foreach($playlist as $playliste) { ?>
+	<tr>
+		<td><?= $playliste['idLec'] ?></td>
+		<td><?= $playliste['titreLec'] ?> </td>
+		<td><?= $playliste['dateLec'] ?> </td>
+	</tr>
+	<?php } ?>
+	</table>
 
 
 	<div class="formulaire">

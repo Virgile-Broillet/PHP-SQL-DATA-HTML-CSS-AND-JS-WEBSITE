@@ -1,9 +1,5 @@
 <?php error_reporting(0); ?>
 
-<?php if(isset($message)) { ?>
-	<p style="background-color: yellow;"><?= $message ?></p>
-<?php } ?>
-
 <style>
 h2{
 	width:25em;
@@ -11,6 +7,28 @@ h2{
 </style>
 
 <center>
+
+	<article>
+		<?php if(isset($titreC)) { ?>
+			<table>
+				<tr>
+				<th> Nom de La Chasnon </th>
+				<th> Date de Sortie de La Chanson </th>
+				<th> Type de Chanson </th>
+				<th> Nom du Groupe </th>
+				<th> Nom de l'Album </th>
+				</tr>
+
+				<tr>
+					<td><?= $titreC ?></td>
+					<td><?= $dateC ?> </td>
+					<td><?= $typeC ?> </td>
+					<td><?= $nomG ?> </td>
+					<td><?= $nomA ?> </td>
+				</tr>
+			</table>
+		<?php } ?>
+	</article>
 
 	<div class="formulaire">
 		<h2>Rechercher Les informations d'Une Chanson</h2>
@@ -28,19 +46,3 @@ h2{
 		</form>
 	</div>
 </center>
-
-<article>
-    <?php if(isset($message)) { ?>
-        <p style="background-color: yellow;"><?= $message ?></p>
-    <?php } ?>
-    <?php if(isset($resultats)) { ?>
-        <ul>
-        <?php
-            foreach($resultats as $instance) {  // nombre d'attributs variable dans les résultats (selon la table)
-                echo '<li>';
-            }
-		}
-        ?>
-</article>
-
-
