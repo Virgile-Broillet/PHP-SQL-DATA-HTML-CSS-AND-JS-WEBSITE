@@ -44,9 +44,8 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 
 	if(VERIF($nomChanson) or VERIF($chemin))
 	{
-		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=gifs'>";
+		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=gifs'>";
 	}else {
-
 		$last_id_song=get_Last_Id_Song($connexion);	
 
 		$idA = get_idA_By_nomAlbum($connexion, $nomAlbum);

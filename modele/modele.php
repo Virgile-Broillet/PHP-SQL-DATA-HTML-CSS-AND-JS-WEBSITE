@@ -19,7 +19,7 @@ function ADD_FLYING_NUGGETS($connexion) //insertion de mon Groupe (Flying Nugget
 	insertAlbum($connexion, 1, 'First Fly', 2022, 'Romain Gayral');
 	insertGroup($connexion, 'Flying Nuggets', 1, 2022);
 	insertSong($connexion, 'Halloween Secret Party', 1, 2022, 0, 'Original', 1, 1);
-	insertSong($connexion, 'Flying Nuggets', 2, 2022, 0, 'Original', 1, 2);
+	insertSong($connexion, 'Flying Nuggets', 2, 2022, 0, 'Original'1, 1, 2);
 	insertSong($connexion, 'Lost in Two Worlds', 3, 2022, 0, 'Original', 1, 3);
 	insertSong($connexion, 'The Interstellar Funky Pirates Of The Sea II', 4, 2022, 0, 'Original', 1, 4);
 	insertSong($connexion, 'Mega Disco Giga Disto', 5, 2022, 0, 'Original', 1, 5);
@@ -32,9 +32,9 @@ function ADD_FLYING_NUGGETS($connexion) //insertion de mon Groupe (Flying Nugget
 	insertVersion($connexion, 6, 1, 2022, 'https://youtu.be/FzwnqBg6Ut4', 159);
 	insertGenre($connexion, 1, 'Metal');
 	insertMusicien($connexion, 1, 'Broillet', 'Virgile', 'Virgile');
-	insertMusicien($connexion, 2, 'Brulé', 'Gabriel', 'Gabriel');
-	insertMusicien($connexion, 3, 'Jobinot', 'Mathilde', 'Mathilde');
-	insertMusicien($connexion, 4, 'NULL', 'Kassime', 'Kassime');
+	insertMusicien($connexion, 1, 'Brulé', 'Gabriel', 'Gabriel');
+	insertMusicien($connexion, 1, 'Jobinot', 'Mathilde', 'Mathilde');
+	insertMusicien($connexion, 1, NULL, 'Kassime', 'Kassime');
 	insertPropriete($connexion, 1, 4249600, 488, 350, 0);
 	insertPropriete($connexion, 2, 5899264, 463, 200, 0);
 	insertPropriete($connexion, 3, 6278144, 347, 100, 0);
@@ -187,15 +187,19 @@ function getPlaylistByName($connexion, $titreLec) {
 }
 
 function get_idA_By_nomAlbum($connexion, $nomAlbum) {
-	if($nomAlbum=='Ne sait pas'){$res = 0; return $res;}
-
-	$requete = "SELECT * FROM ALBUM WHERE titreA LIKE "."\"$nomAlbum\"".";";
-	$prepare = mysqli_query($connexion, $requete);
-	while($row=mysqli_fetch_assoc($prepare))
+	if($nomAlbum='Ne Sait Pas')
 	{
-		$res = $row['idA'];
+		$res =0;
+		return $res;
+	}else{
+		$requete = "SELECT idA FROM ALBUM WHERE titreA LIKE "."\"$nomAlbum\"".";";
+		$prepare = mysqli_query($connexion, $requete);
+		while($row=mysqli_fetch_assoc($prepare))
+		{
+			$res = $row['idA'];
+		}
+		return $res;
 	}
-	return $res;
 }
 
 function get_idG_By_nomGroupe($connexion, $nomGroupe) {
@@ -230,58 +234,35 @@ function Is_nomG_exists($connexion, $nomGroupe) {
 
 // insère une nouvelle chanson nommée $nomChanson
 function insertSong($connexion, $nomChanson, $id, $année, $type, $forme, $idA, $numero_piste) {
-
-	if($type<0){
-		$type = 0;}
 	if($année<1)
 	{
 		if($idA==0)
 		{
 			if($numero_piste==0)
 			{
-				$requete = "INSERT INTO CHANSON VALUES (NULL, $id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', NULL);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', NULL, NULL);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES (NULL, $id, '$nomChanson', DEFAULT, $type, '$forme', NULL);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}else{
-				$requete = "INSERT INTO CHANSON VALUES (NULL, $id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', $numero_piste);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', NULL, $numero_piste);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES (NULL, $id, '$nomChanson', DEFAULT, $type, '$forme', $numero_piste);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}
 		}else{
 			
 			if($numero_piste==0)
 			{
-				$requete = "INSERT INTO CHANSON VALUES ($idA, $id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', NULL);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', $idA, NULL);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES ($idA, $id, '$nomChanson', DEFAULT, $type, '$forme', NULL);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}else{
-				$requete = "INSERT INTO CHANSON VALUES ($idA, $id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', $numero_piste);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", DEFAULT, $type, '$forme', $idA, $numero_piste);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES ($idA, $id, '$nomChanson', DEFAULT, $type, '$forme', $numero_piste);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}
 		}
 	}else{
@@ -289,49 +270,29 @@ function insertSong($connexion, $nomChanson, $id, $année, $type, $forme, $idA, 
 		{
 			if($numero_piste==0)
 			{
-				$requete = "INSERT INTO CHANSON VALUES (NULL, $id, "."\"$nomChanson\"".", $année, $type, '$forme', NULL);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", $année, $type, '$forme', NULL, NULL);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES (NULL, $id, '$nomChanson', $année, $type, '$forme', NULL);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}else{
-				$requete = "INSERT INTO CHANSON VALUES (NULL, $id, "."\"$nomChanson\"".", $année, $type, '$forme', $numero_piste);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", $année, $type, '$forme', NULL, $numero_piste);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES (NULL, $id, '$nomChanson', $année, $type, '$forme', $numero_piste);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}
 
 		}else{
 			if($numero_piste==0)
 			{
-				$requete = "INSERT INTO CHANSON VALUES ($idA, $id, "."\"$nomChanson\"".", $année, $type, '$forme', NULL);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", $année, $type, '$forme', $idA, NULL);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES ($idA, $id, '$nomChanson', $année, $type, '$forme', NULL);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}else{
-				$requete = "INSERT INTO CHANSON VALUES ($idA, $id, "."\"$nomChanson\"".", $année, $type, '$forme', $numero_piste);";
+				$requete = "INSERT INTO CHANSON VALUES ($id, "."\"$nomChanson\"".", $année, $type, '$forme', $idA, $numero_piste);";
 				$prepare=mysqli_prepare($connexion,$requete);
 				$res = mysqli_stmt_execute($prepare);
-				if($res){return $res;}else{
-					$requete = "INSERT INTO CHANSON VALUES ($idA, $id, '$nomChanson', $année, $type, '$forme', $numero_piste);";
-					$prepare=mysqli_prepare($connexion,$requete);
-					$res2 = mysqli_stmt_execute($prepare);
-					return $res2;
-				}
+				return $res;
 			}
 		}
 	}
@@ -345,16 +306,34 @@ function insertGroup($connexion, $nomGroupe, $id, $année) {
 	return $res;
 }
 
-function insertENREGISTRER($connexion, $idG, $idV){
+function insertENREGISTRER($connexion, $idG, $idV) {
+	
 	$requete="INSERT INTO ENREGISTRER VALUES($idG, $idV);";
 	$prepare=mysqli_prepare($connexion,$requete);
 	$res = mysqli_stmt_execute($prepare);
 	return $res;
 }
 
+function insertPERIODE($connexion, $deb, $fin) {
+	
+	$requete="INSERT INTO PERIODE VALUES('$deb', '$fin);";
+	$prepare=mysqli_prepare($connexion,$requete);
+	$res = mysqli_stmt_execute($prepare);
+	return $res;
+}
+
+
 function insertGenre($connexion, $idG, $nom) {
 	
 	$requete="INSERT INTO GENRE VALUES($idG, "."\"$nom\"".", $idG);";
+	$prepare=mysqli_prepare($connexion,$requete);
+	$res = mysqli_stmt_execute($prepare);
+	return $res;
+}
+
+function insertMusicien($connexion, $idM, $nomM, $prenomM, $nom_scene) {
+	
+	$requete="INSERT INTO MUSICIEN VALUES($idM, "."\"$nomM\"".", "."\"$prenomM\"".", "."\"$nom_scene\"".");";
 	$prepare=mysqli_prepare($connexion,$requete);
 	$res = mysqli_stmt_execute($prepare);
 	return $res;
@@ -373,6 +352,13 @@ function insertPropriete($connexion, $idP, $filesize, $playcount, $lastplayed, $
 
 function insertDécrire($connexion, $idV, $idP) {
 	$requete="INSERT INTO DÉCRIRE VALUES($idV, $idP);";
+	$prepare=mysqli_prepare($connexion,$requete);
+	$res = mysqli_stmt_execute($prepare);
+	return $res;
+}
+
+function insertProduire($connexion, $idC, $idV, $deb, $fin) {
+	$requete="INSERT INTO PRODUIRE VALUES($idC, $idV, '$deb', '$fin');";
 	$prepare=mysqli_prepare($connexion,$requete);
 	$res = mysqli_stmt_execute($prepare);
 	return $res;
@@ -411,37 +397,25 @@ function insertPosseder($connexion, $idc, $idGE) {
 	return $res;
 }
 
+function insertFAIREPARTIE($connexion, $idM, $idG, $deb, $rôle, $mb)  {
+	
+	$requete="INSERT INTO FAIRE_PARTIE VALUES($idM, $idG, '$deb', '$rôle', $mb);";
+	$prepare=mysqli_prepare($connexion,$requete);
+	$res = mysqli_stmt_execute($prepare);
+	return $res;
+}
+
 function insertVersion($connexion, $idc, $nV, $année, $chemin, $durée) {
 	
-	if($année<0){$année = 1;}
-	if($durée<0){$durée = 1;}
-	$requete="INSERT INTO VERSION VALUES($idc, $nV, $année, $durée, "."\"$chemin\""." );";
-	$prepare=mysqli_prepare($connexion,$requete);
-	$res = mysqli_stmt_execute($prepare);
-	if($res){return $res;}else{
-		$requete = "INSERT INTO VERSION VALUES($idc, $nV, $année, $durée, '$chemin');";
-		$prepare=mysqli_prepare($connexion,$requete);
-		$res2 = mysqli_stmt_execute($prepare);
-		return $res2;
-	}
-}
-
-function insertFAIREPARTIE($connexion, $idM, $idG, $deb, $role, $mb){
-	$requete="INSERT INTO FAIRE_PARTIE VALUES($idM, $idG, '$deb', '$role', $mb);";
+	$requete="INSERT INTO VERSION VALUES($idc, $nV, $année, "."\"$chemin\"".", $durée );";
 	$prepare=mysqli_prepare($connexion,$requete);
 	$res = mysqli_stmt_execute($prepare);
 	return $res;
 }
 
-function insertProduire($connexion, $idC, $idV, $deb, $fin){
-	$requete="INSERT INTO PRODUIRE VALUES($idC, $idV, '$deb', '$fin');";
-	$prepare=mysqli_prepare($connexion,$requete);
-	$res = mysqli_stmt_execute($prepare);
-	return $res;
-}
-
-function insertInviter($connexion, $idC, $idM, $commentaire){
-	$requete="INSERT INTO INVITER VALUES($idC, $idM, "."\"$commentaire\""."  );";
+function insertInviter($connexion, $idc, $idM, $commentaire) {
+	
+	$requete="INSERT INTO INVITER VALUES($idc, $idM, "."\"$commentaire\"".");";
 	$prepare=mysqli_prepare($connexion,$requete);
 	$res = mysqli_stmt_execute($prepare);
 	return $res;
@@ -461,22 +435,12 @@ function insertAlbum($connexion, $idA, $titreA, $year, $producer) {
 		$requete="INSERT INTO ALBUM VALUES($idA, "."\"$titreA\"".", DEFAULT, "."\"$producer\""." );";
 		$prepare=mysqli_prepare($connexion,$requete);
 		$res = mysqli_stmt_execute($prepare);
-		if($res){return $res;}else{
-			$requete = "INSERT INTO ALBUM VALUES($idA, '$titreA', DEFAULT, "."\"$producer\""." );";
-			$prepare=mysqli_prepare($connexion,$requete);
-			$res2 = mysqli_stmt_execute($prepare);
-			return $res2;
-		}
+		return $res;
 	}else{
 		$requete="INSERT INTO ALBUM VALUES($idA, "."\"$titreA\"".", $year, "."\"$producer\""." );";
 		$prepare=mysqli_prepare($connexion,$requete);
 		$res = mysqli_stmt_execute($prepare);
-		if($res){return $res;}else{
-			$requete = "INSERT INTO ALBUM VALUES($idA, '$titreA', $year, "."\"$producer\""." );";
-			$prepare=mysqli_prepare($connexion,$requete);
-			$res2 = mysqli_stmt_execute($prepare);
-			return $res2;
-		}
+		return $res;
 	}
 }
 
@@ -543,20 +507,6 @@ function insertPlaylist($connexion, $idLec, $titreLec)
 {
 	$dateLec = date('Y-m-d');
 	$requete="INSERT INTO LISTE_DE_LECTURE VALUES($idLec, "."\"$titreLec\"".", '$dateLec');";
-	$prepare=mysqli_prepare($connexion,$requete);
-	$res = mysqli_stmt_execute($prepare);
-	return $res;
-}
-
-function insertMusicien($connexion, $idM, $nomM, $prenomM, $nom_scene) {
-	$requete="INSERT INTO MUSICIEN VALUES($idM, "."\"$nomM\"".", "."\"$prenomM\"".", "."\"$nom_scene\""." );";
-	$prepare=mysqli_prepare($connexion,$requete);
-	$res = mysqli_stmt_execute($prepare);
-	return $res;
-}
-
-function insertPERIODE($connexion, $deb, $fin){
-	$requete="INSERT INTO PERIODE VALUES('$deb', '$fin');";
 	$prepare=mysqli_prepare($connexion,$requete);
 	$res = mysqli_stmt_execute($prepare);
 	return $res;

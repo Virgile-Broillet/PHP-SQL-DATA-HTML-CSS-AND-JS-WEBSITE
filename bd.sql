@@ -43,6 +43,7 @@ CREATE TABLE `CHANSON` (
 CREATE TABLE `DÉCRIRE` (
   `idV` INTEGER,
   `idP` INTEGER,
+  `nomP` VARCHAR(254),
   PRIMARY KEY (`idV`, `idP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 
@@ -160,7 +161,7 @@ CREATE TABLE `VERSION` (
   `numéroV` INTEGER,
   `dateV` YEAR,
   `Durée` INTEGER,
-  `nomfichier` VARCHAR(3000),
+  `nomfichier` VARCHAR(3000), --chemin de la musique--
   PRIMARY KEY (`idV`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8MB4;
 

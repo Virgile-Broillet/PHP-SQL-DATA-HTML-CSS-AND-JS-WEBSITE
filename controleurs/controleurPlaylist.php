@@ -27,7 +27,7 @@
 
 		if(VERIF($titreLec))
 		{
-			echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=gifs'>";
+			echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=gifs'>";
 		}else
 		{
 			$verification=getPlaylistByName($connexion, $titreLec);
@@ -49,7 +49,7 @@
 			else {
 				$message = "Une Playlist existe déjà avec ce nom ($titreLec).";
 			}
-			echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=playlist#'>";
+			echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=playlist#'>";
 		}
 	}
 	
@@ -61,7 +61,7 @@
 		delete_ligne($connexion, $id, "`JOUER`", "`idLec`");
 		delete_ligne($connexion, $id, "`INCLURE`", "`idLec`");
 		// on supprime la ligne correspondant au nom de la playlist;
-		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=playlist#'>";
+		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=playlist#'>";
 	}
  
 ?>
