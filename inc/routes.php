@@ -9,7 +9,7 @@
 $routes = array(
 	'afficher' => array('controleur' => 'controleurAfficher', 'vue' => 'vueAfficher'),
 	'ajouter' => array('controleur' => 'controleurAjouter', 'vue' => 'vueAjouter'),
-	'critique' => array('controleur' => 'controleurCritique', 'vue' => 'vueCritique'),
+	'gerer' => array('controleur' => 'controleurGerer', 'vue' => 'vueGerer'),
 	'rechercher' => array('controleur' => 'controleurRechercher', 'vue' => 'vueRechercher'),
 	'remerciements' => array('controleur' => 'controleurRemerciements', 'vue' => 'vueRemerciements'),
     'playlist' => array('controleur' => 'controleurPlaylist', 'vue' => 'vuePlaylist'),

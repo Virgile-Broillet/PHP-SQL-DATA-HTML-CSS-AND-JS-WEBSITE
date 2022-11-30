@@ -22,7 +22,7 @@
 	</div>
 
     <div class="container_header">
-        <h1 class="texte">Playlist de Musiques</h1>
+        <h1 class="texte">Nuggets Musique</h1>
 		<div class="para"><?= $baseline ?></div>
 	</div>
 </div>

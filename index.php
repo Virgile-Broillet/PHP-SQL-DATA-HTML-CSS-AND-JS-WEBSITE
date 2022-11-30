@@ -20,7 +20,7 @@ $connexion = getConnexionBD(); // connexion à la BD
     <!-- lie le style CSS externe  -->
     <link href="css/style.css" rel="stylesheet" media="all" type="text/css">
     <!-- ajoute une image favicon (dans l'onglet du navigateur) -->
-    <link rel="shortcut icon" type="image/x-icon" href="img/sheep.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/Logo_site.png" />
 </head>
 <body>
     <?php include('static/header.php'); ?>

@@ -44,8 +44,9 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 
 	if(VERIF($nomChanson) or VERIF($chemin))
 	{
-		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/serial-critique/index.php?page=gifs'>";
+		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=gifs'>";
 	}else {
+
 		$last_id_song=get_Last_Id_Song($connexion);	
 
 		$idA = get_idA_By_nomAlbum($connexion, $nomAlbum);
@@ -69,7 +70,21 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 			}
 		}
 		else {
-			$message = "Une Chanson existe déjà avec ce nom ($nomChanson).";
+
+			$idV = get_Last_Id_Version($connexion, $nomChanson);
+			$nV = get_last_nV_By_titreC($connexion, $nomChanson);
+			$idC = get_idC_By_titreC($connexion, $nomChanson);
+			$nV = $nV+1;
+
+			$insertion_version2 = insertVersion($connexion, $idV, $nV, $année, $chemin, $durée);
+			$insertion_inter2 = insertInterpreter2($connexion, $idV, $idC, $idG);
+			$message = "Une Chanson existe déjà avec ce nom ($nomChanson), une nouvelle version à été insérée.";
+
+			if($insertion_version2 && $insertion_inter2 == TRUE){
+				$message = "Une Chanson existe déjà avec ce nom ($nomChanson), une nouvelle version à été insérée.";
+			}else{
+				$message = "Erreur lors de l'insertion de la Chanson 2 $nomChanson.";
+			}
 		}
 	}
 }

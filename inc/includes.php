@@ -1,5 +1,5 @@
 <?php
-$nomSite = "Music Playlist Watcher";
-$baseline = "Fait par Louis Roussange (p1904941) et Virgile Broillet (p2103804)";
+$nomSite = "Nuggets Musique";
+$baseline = "Réalisé par Virgile Broillet p2103804 et Louis Roussange p1904941";
 
 ?>
