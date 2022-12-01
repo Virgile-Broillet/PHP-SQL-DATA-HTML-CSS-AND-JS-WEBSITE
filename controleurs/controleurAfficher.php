@@ -1,9 +1,9 @@
 <?php 
 $message = "";
 
-$chanson = getInstances($connexion, "CHANSONS");
+$chanson = getInstances($connexion, "CHANSON");
 if($chanson == null || count($chanson) == 0) {
-	$message .= "Aucun Groupe n'a été trouvée dans la base de données !";
+	$message .= "Aucune Chanson n'a été trouvée dans la base de données !";
 }
 
 $groupe = getInstances($connexion, "GROUPE");

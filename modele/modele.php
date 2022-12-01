@@ -329,6 +329,65 @@ function Is_song_exists($connexion, $nomChanson) {
     return $res;
 }
 
+//renvoie le x chanson dont le playcount est le plus éléver (x = $limit)
+function max_playcount($connexion){
+    $requete = "SELECT playcount, titreC FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON ORDER BY PROPRIÉTÉ.playcount DESC LIMIT 1";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
+    {
+        $res[0] = $row['titreC']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreC' pour pouvoir y accéder
+        $res[1] = $row['playcount']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'playcount' pour pouvoir y accéder
+    }
+    return $res;
+}
+
+//renvoie le lastplay le plus élever des chansons
+function max_last_played($connexion){
+    $requete = "SELECT lastplayed, titreC FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON ORDER BY PROPRIÉTÉ.lastplayed DESC LIMIT 1";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
+    {
+        $res[0] = $row['titreC']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreC' pour pouvoir y accéder
+        $res[1] = $row['lastplayed']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'lastplayed' pour pouvoir y accéder
+    }
+    return $res;
+}
+
+//renvoie le skipcount le plus élever des chansons
+function max_skip_count($connexion){
+    $requete = "SELECT skipcount, titreC FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON ORDER BY PROPRIÉTÉ.skipcount DESC LIMIT 1";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
+    {
+        $res[0] = $row['titreC']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreC' pour pouvoir y accéder
+        $res[1] = $row['skipcount']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'skipcount' pour pouvoir y accéder
+    }
+    return $res;
+}
+
+//renvoie le nom du groupe avec le plus de chanson dans la BD + le nb de chansons
+function max_song_group($connexion){
+    $requete = "SELECT count(*) AS NB , nomG FROM GROUPE NATURAL JOIN INTERPRÉTER GROUP BY nomG ORDER BY `NB` DESC LIMIT 1";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
+    {
+        $res[0] = $row['NB']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'NB' pour pouvoir y accéder
+        $res[1] = $row['nomG']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'nomG' pour pouvoir y accéder
+    }
+    return $res;
+}
+
+//renvoie le nombre de chanson dont le lastplay est NULL
+function last_played($connexion){
+    $requete = "SELECT COUNT(*) AS NB FROM PROPRIÉTÉ WHERE lastplayed IS NULL";
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
+    {
+        $res = $row['NB']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'NB' pour pouvoir y accéder
+    }
+    return $res;
+}
+
 // insère une nouvelle chanson nommée $nomChanson, avec l'id $id, la date de composition $date, le type $type, la forme $forme, lié à l'album $idA, avec le numéro de piste $numéro_piste 
 //cette fonction est assez longue et redondante mais nécessaire pour la bonne insertion en prenant en compte tous les paramètres
 function insertSong($connexion, $nomChanson, $id, $année, $type, $forme, $idA, $numero_piste) {

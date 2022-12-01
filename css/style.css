@@ -95,7 +95,7 @@ img {
 /* COMPTEUR */
 
 .texte-complet {
-  width: 22.6em;
+  width: 800px;
   height: auto;
   background: #e6e6e6;
   border-radius: 8px;
@@ -412,9 +412,10 @@ thead > tr {
   background-color: rgb(228, 240, 245);
 }
 
-th, td {
+th,
+td {
   border: 1px solid black;
-  padding:4px 6px;
+  padding: 4px 6px;
 }
 
 /* FIN PAGE REMERCIEMENTS */
