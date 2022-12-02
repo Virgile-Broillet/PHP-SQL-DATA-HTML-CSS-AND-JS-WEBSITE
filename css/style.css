@@ -120,6 +120,15 @@ h4 {
   font-size: 1em;
 }
 
+h4-bis {
+  margin: 10px 0;
+  padding-bottom: 5px;
+  width: 45em;
+  color: #78788c;
+  border-bottom: 3px solid #78788c;
+  font-size: 1em;
+}
+
 h5 {
   margin: 10px 0;
   padding-bottom: 5px;
@@ -350,6 +359,12 @@ p:before {
   width: 45%;
 }
 
+.gauche2 {
+  text-align: left;
+  float: left;
+  width: 70%;
+}
+
 /* FIN FORMULAIRE ADD */
 
 /* PAGE REMERCIEMENTS */
@@ -401,6 +416,8 @@ p:before {
   margin-right: 7em;
   width: 692px;
 }
+/* FIN PAGE REMERCIEMENTS */
+
 /* STYLE DES TABLEAUX */
 
 table {
@@ -415,7 +432,25 @@ thead > tr {
 th,
 td {
   border: 1px solid black;
-  padding: 4px 6px;
+  padding: 10px 8px;
 }
 
-/* FIN PAGE REMERCIEMENTS */
+/* FIN STYLE DES TABLEAUX */
+
+.ACCUEIL table tr td {
+  border: 1px solid;
+  padding-bottom: 5px;
+  width: 250px;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin: 0 0 1em 0;
+  font-size: 17px;
+  line-height: 1.4705;
+  letter-spacing: -0.022em;
+  font-family: Helvetica;
+  color: #1d1d1f;
+  font-style: normal;
+  font-size: 1em;
+}

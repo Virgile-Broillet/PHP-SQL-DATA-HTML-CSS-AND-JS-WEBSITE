@@ -20,12 +20,46 @@ if($album == null || count($album) == 0) {
 	$message .= "Aucun ALbum n'a été trouvée dans la base de données !";
 }
 
+// pour réaliser un affichage des chansons :
+$CHANSONS_interpretees = get_last_songs_by_idC($connexion, 3);
+
+if(isset($_POST['boutonSuppr'])){
+	$nomChanson=$_POST["nomchanson"];
+	$idc = get_idC_By_titreC($connexion, $nomChanson);
+
+	if(empty($idc)){
+		$idc = get_Last_Id_Song($connexion);
+		$idc=$idc-1;
+	}
+
+	$idV = get_idV_inter($connexion, $nomChanson);
+
+	print_r($idc); print_r($idV); print_r($nomChanson);
+
+	$del1=delete_ligne($connexion, 'idC', 'POSSÉDER', $idc);
+	$del2=delete_ligne($connexion, 'idV', 'INTERPRÉTER', $idV);
+	$optionel1=delete_ligne($connexion, 'idV', 'DÉCRIRE', $idV);
+	$optionel2=delete_ligne($connexion, 'idV', 'JOUER', $idV);
+	$optionel3=delete_ligne($connexion, 'idV', 'PRODUIRE', $idV);
+	$optionel4=delete_ligne($connexion, 'idC', 'INVITER', $idc);
+
+	$del3=delete_ligne($connexion, 'idV', 'VERSION', $idV);
+	$del4=delete_ligne($connexion, 'idC', 'CHANSON', $idc);
+
+
+	if($del1&&$del2&&$del3&&$del4 == TRUE){
+		$message .= "La chanson ".$nomChanson." a bien été supprimé de la Base de Données !";
+	}else{
+		$message .= "erreur";
+	}
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=ajouter#'>";
+}
+
 if(isset($_POST['boutonValider'])) { // formulaire soumis
 
 	if(empty($_POST['nomchanson']))
 	{
-		$i = rand(0,10);
-		$nomChanson = nom_aléatoire($i);
+		$nomChanson = nom_aléatoire($connexion, 3);
 	}
 	else 
 	{ 
@@ -72,9 +106,6 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 			if($insertion_song && $insertion_poss && $insertion_version && $insertion_inter == TRUE) {
 				$message = "La Chanson $nomChanson a bien été ajoutée !";
 			}
-			else {
-				$message = "Erreur lors de l'insertion de la Chanson $nomChanson.";
-			}
 		}
 		else {
 
@@ -89,11 +120,10 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 
 			if($insertion_version2 && $insertion_inter2 == TRUE){
 				$message = "Une Chanson existe déjà avec ce nom ($nomChanson), une nouvelle version à été insérée.";
-			}else{
-				$message = "Erreur lors de l'insertion de la Chanson $nomChanson.";
 			}
 		}
 	}
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=ajouter#'>";
 }
 
 ?>

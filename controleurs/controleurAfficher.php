@@ -25,6 +25,7 @@ $poss = getInstances($connexion, "POSSÉDER");
 if($poss == null || count($poss) == 0) {
 	$message .= "Aucune Possésion ";
 }
+$CHANSONS_interpretees = get_last_versions_by_idC($connexion, 10);
 
 	if(count($groupe)< 10 && count($chanson) < 10){
 

@@ -11,7 +11,7 @@ h2{
 </style>
 
 <center>
-	
+	<!-- AFFICHAGE DES PLAYLISTS -->
 	<table>
 	<tr>
 	 <th> identifiant </th>
@@ -28,7 +28,7 @@ h2{
 	<?php } ?>
 	</table>
 
-
+   <!-- FORMULAIRE DE CREATION DE PLAYLISTS-->
 	<div class="formulaire">
 		<h2> Création d'Une Playlist Aléatoire</h2>
 		<form method="post" action="#">
@@ -38,7 +38,6 @@ h2{
 			<div class="droite"><p type="Nom de votre Playlist :"> <input class="bb" type="text" name="nomPlaylist" id="nomPlaylist" placeholder="Les musiques de Tchoupi" ></div></p></br>
 			
 			</br></br></br></br></br>
-
 			<p type="Genre privilégié :">
 				<select name="genre1" id="genre1">
 						<option>Tous les genres ( au hasard )</option>
@@ -53,13 +52,24 @@ h2{
 						<option>Reggae</option>
 				</select>
 			<br/></p>
-			
 			</br>
-
 			<div class="button"><input type="submit" name="boutonValider" value="Ajouter"/></div>
 		</form>
 	</div>
-	
+	<!-- Affichage pour connaître l'étât de la  -->
+	<?php if(isset($_POST['boutonValider']))
+	{ 
+		$titreLec = $_COOKIE['titreLec'];
+		$nom_genre =  $_COOKIE['nom_genre']
+		?>
+		<h5>
+			Il Y A <?=compte_genre_playlist($connexion, $titreLec, $nom_genre)  ?> Genres respectés parmi <?=compte_chanson_playlist($connexion, $titreLec)?> Chansons ajoutées. 
+			<!-- FONCTION 1 : nbr de chansons avec le bon genre -->
+			<!-- FONCTION 2 : nbr de chansons parmi la Playlist -->
+		</h5>
+		
+	<?php } ?>
+	<!-- FORMULAIRE DE SUPPRESSION DE PLAYLISTS -->
 	<div class="formulaire">
 		<h2> Supression d'Une Playlist</h2>
 		</br>

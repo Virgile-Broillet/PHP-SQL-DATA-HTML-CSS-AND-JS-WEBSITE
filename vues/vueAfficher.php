@@ -3,19 +3,51 @@
 <?php } ?>
 
 <?php error_reporting(0); ?>
+<center>
+<h2>Liste des Chansons - Versions les plus récemment ajoutées :</h2>
+	<table>
+		<tr>
+		 <th> idC </th>
+		 <th> Titre de la Chanson </th>
+		 <th> nom du Groupe </th>
+		 <th> Date de la Version </th>
+		 <th> Skip-count du titre </th>
+		 <th> Last-played </th>
+		 <th> Nombres d'écoutes </th>
+		</tr>
+
+		<?php foreach($CHANSONS_interpretees as $song) { ?>
+		<tr>
+			<td><?= $song['idC'] ?></td>
+			<td><?= $song['titreC'] ?></td>
+			<td><?= $song['nomG'] ?> </td>
+			<td><?= $song['DateV'] ?> </td>
+			<td><?= $song['Durée'] ?> </td>
+			<td><?= $song['playcount'] ?> </td>
+			<td><?= $song['skipcount'] ?> </td>
+		</tr>
+		<?php } ?>
+
 
 <table>
 	<h2>Liste des Groupes :</h2>
 	<tr>
 		<th> Identifiant :</th>
 		<th> Nom du Groupe :</th>
+		<th> Membres avec leur date d'arrivée : </th>
 	</tr>
 		
 <?php foreach($groupe as $groupe) { ?>
    <tr>
 	<td><?= $groupe['idG'] ?></td>
 	<td><?= $groupe['nomG'] ?> </td>
-	
+	<td>
+		<? 
+		$membre = get_info_member($connexion, $groupe['idG']);
+		foreach($membre as $mbr){ ?>
+		<td> <?= $mbr['nomM']?> <?= $mbr['prenomM']?> <?= $mbr['date_debut']?></td>
+		<? } ?>
+	</td>
    </tr>
 <?php } ?>
 </table>
@@ -34,4 +66,4 @@
 	 </tr>
 <?php } ?>
 </table>
-
+</center>

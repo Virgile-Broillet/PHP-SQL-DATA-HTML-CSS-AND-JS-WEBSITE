@@ -222,14 +222,6 @@ function get_chansons_playlist($connexion, $valeur ,$titreLec){
     return $Tab;
 }
 
-// retourne les informations sur la chanson nommée $nomChanson
-function getSongByName($connexion, $nomChanson) {
-    $requete = "SELECT * FROM CHANSON WHERE titreC LIKE "."\"$nomChanson\"".";"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
-    $res = mysqli_query($connexion, $requete);
-    $series = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    return $series;
-}
-
 //retourne les informations sur la playlist nommé $titreLec
 function getPlaylistByName($connexion, $titreLec) {
     $requete = "SELECT * FROM LISTE_DE_LECTURE WHERE titreLec LIKE "."\"$titreLec\"".";"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
@@ -275,7 +267,8 @@ function get_idC_By_titreC($connexion, $titreC) {
 
 //retourne l'idV de la musique nommé $titreC sous forme de tableau
 function get_last_nV_By_titreC($connexion, $titreC) {
-    $requete = "SELECT * FROM VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON WHERE titreC = "."\"$titreC\""." ORDER BY VERSION.numéroV DESC LIMIT 1;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
+    $requete = "SELECT * FROM VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON WHERE titreC = "."\"$titreC\""." ORDER BY VERSION.numéroV DESC LIMIT 1;"; 
+			//cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
@@ -284,7 +277,7 @@ function get_last_nV_By_titreC($connexion, $titreC) {
     return $res;
 }
 
-//récupère l'id dy genre en utilisant le nom du Genre $nomGenre
+//récupère l'id du genre en utilisant le nom du Genre $nomGenre
 function get_idGE_By_nomGE($connexion, $nomGenre) {
     $requete = "SELECT idGE FROM GENRE WHERE nom_genre = "."\"$nomGenre\"".";"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
@@ -329,7 +322,7 @@ function Is_song_exists($connexion, $nomChanson) {
     return $res;
 }
 
-//renvoie le x chanson dont le playcount est le plus éléver (x = $limit)
+//renvoie le x chanson dont le playcount est le plus élévé (x = $limit)
 function max_playcount($connexion){
     $requete = "SELECT playcount, titreC FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON ORDER BY PROPRIÉTÉ.playcount DESC LIMIT 1";
     $prepare = mysqli_query($connexion, $requete);
@@ -341,7 +334,7 @@ function max_playcount($connexion){
     return $res;
 }
 
-//renvoie le lastplay le plus élever des chansons
+//renvoie le lastplay le plus éleveé des chansons
 function max_last_played($connexion){
     $requete = "SELECT lastplayed, titreC FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON ORDER BY PROPRIÉTÉ.lastplayed DESC LIMIT 1";
     $prepare = mysqli_query($connexion, $requete);
@@ -387,6 +380,64 @@ function last_played($connexion){
     }
     return $res;
 }
+
+//==============( Fonctionq utiles das VUE AJOUTER et dans l'AFFICHAGE )===========================
+
+// retourne les informations sur la chanson nommée $nomChanson
+function getSongByName($connexion, $nomChanson) {
+    $requete = "SELECT * FROM CHANSON WHERE titreC LIKE "."\"$nomChanson\"".";"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
+    $res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $result;
+}
+
+function get_last_versions_by_idC($connexion, $limit){
+	$requete = "SELECT c.idC, g.nomG, v.DateV, c.titreC, p.playcount, v.Durée, p.lastplayed, p.skipcount 
+	FROM `CHANSON`c NATURAL JOIN `INTERPRÉTER`s NATURAL JOIN `GROUPE`g 
+		  NATURAL JOIN `VERSION`v NATURAL JOIN `DÉCRIRE`d NATURAL JOIN `PROPRIÉTÉ`p 
+	ORDER BY idC desc LIMIT ".$limit." ;";
+	 // on récupère les chansons dernièrement ajoutées
+	 // on cible les chansons liées par `INTERPRÉTER` 
+    $res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $result;
+}
+
+function get_last_songs_by_idC($connexion, $limit){
+	$requete = "SELECT c.idC, g.nomG, c.titreC, c.numero_piste, c.date_création
+	FROM `CHANSON`c NATURAL JOIN `INTERPRÉTER`s NATURAL JOIN `GROUPE`g  
+	ORDER BY idC desc LIMIT ".$limit." ;";
+	 // on récupère les chansons dernièrement ajoutées
+	 // on cible les chansons liées par `INTERPRÉTER` 
+    $res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $result;
+}
+
+function get_info_member($connexion, $idG)
+{
+	$requete = "SELECT * FROM `MUSICIEN` NATURAL JOIN `FAIRE_PARTIE`p
+				NATURAL JOIN `PERIODE` NATURAL JOIN `GROUPE`g
+				WHERE g.idG = $idG ;"; 
+    $res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $result;
+}
+
+function delete_song($connexion, $nom)
+{
+	$idC = SELECT_E_WHERE_LIKE($connexion, "`CHANSON`", "idC", "titreC", $nom );
+	if($idC != NULL )
+	{
+	$requete = "DELETE FROM `POSSÉDER` WHERE idC = ".$idC."; DELETE FROM `INTERPRÉTER` WHERE idC = ".$idC."; DELETE FROM `CHANSONS` WHERE idC = ".$idC." ;"; 
+    $res = mysqli_query($connexion, $requete);
+    mysqli_commit($connexion);
+	return "SUPPRIME";
+	}
+	else {return "ERREUR DE SUPPRESSION";}
+}
+
+//==================================================================================
 
 // insère une nouvelle chanson nommée $nomChanson, avec l'id $id, la date de composition $date, le type $type, la forme $forme, lié à l'album $idA, avec le numéro de piste $numéro_piste 
 //cette fonction est assez longue et redondante mais nécessaire pour la bonne insertion en prenant en compte tous les paramètres
@@ -781,11 +832,35 @@ function Get_Under_Gender($connexion, $nomGenre)
 
 }
 
+function plus_jouees($connexion)
+{
+	$requete="SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE playcount > 15";
+	$res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $result;
+}
+
+function plus_recentes($connexion)
+{
+	$requete="SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE lastplayed < 100 || lastplayed IS NULL";
+	$res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $result; // renvoi les versions jouees le plus récemment
+}
+
+function plus_skipcount($connexion)
+{
+	$requete="SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE skipcount <8";
+	$res = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($res, MYSQLI_ASSOC); 
+    return $result; // renvoi les versions les moins 'skippées'
+}
+
 //Cette fonction me range au hasard un tableau de Durée, titreC, idv, idA, numéro_piste, 
 //puis j'ajoute une colonne ROW_NUMBER avec comme nom IDPLACE, me permettant de donné un ID a ce nouveaux tableau, 
 //je vais par la suite, intégrer se tableau dans un FROM, pour éviter la requette longue, j'utilise une définition de fonction MyCTE
-function SQL_TO_TAB($connexion, $nomGenre, $durée, $nb_ligne, $idLec) //nb_ligne est défini arbitrairement il sera incrémenté ou décrémenter dans GET_MOYENNE
-{   //Définition des 5 tableaux qui accueilleront mes résultats 
+function SQL_TO_TAB($connexion, $nomGenre, $durée, $nb_ligne, $idLec ) //nb_ligne est défini arbitrairement il sera incrémenté ou décrémenter dans GET_MOYENNE
+{   //Définition des 5 tableaux qui accueilleront mes résultats    // VERSION PAR DEFAUT
     $TabDurée = array();
     $TabTitre = array();
     $TabIDV = array();
@@ -859,6 +934,28 @@ function insertJouer_AND_insertInclure($connexion, $TabIDV, $nb_ligne, $idLec, $
         insertInclure($connexion, $idLec, $TabIDA[$i-1], $TabNUM_PISTE[$i-1]); //appel de INCULRE avec TabIDA et TabNUM_PISTE remplis lors de l'appel à SQL_TO_TAB
         $i++;//incrémentation de l'entier de boucle
     }
+}
+
+//pour insérer une seule chanson dans une playlist
+function insertion_chanson_playlist($connexion, $idLec, $idA, $numero_piste, $idV)
+{
+	// verification avant d'ajouter
+	if( verif_insert_song_playlist($connexion, $idLec, $idV) == true )
+	{
+	insertJouer($connexion, $idLec, $idV);
+	insertInclure($connexion, $idLec, $idA, $numero_piste);
+	return "ok";
+	}
+	else{return "pas ok";}
+}
+
+function verif_insert_song_playlist($connexion, $idLec, $idV)
+{
+	$requete="COUNT * FROM JOUER WHERE idLec = ".$idLec." AND idV = ".$idV.";";
+    $prepare=mysqli_prepare($connexion,$requete);
+    $res = mysqli_stmt_execute($prepare);
+    if($res == 1) {return false; } //la chanson esrt déjà dedans
+    else 		  {return true; } // on peut insérer la chanson d:D yee !!
 }
 
 //insert dans la BD dans la Table JOUER avec l'id de la playlist $idLec, et l'idV $idV
@@ -971,20 +1068,80 @@ function get_id_By_NomPlaylist($connexion, $nom){
 
 
 function compte_chanson_groupe($connexion) {
-    $requete ="SELECT g.idG, b.nomG, COUNT(g.idG) AS value_occurrence FROM INTERPRÉTERg natural Left join GROUPEb GROUP BY idG ORDER BY value_occurrence DESC LIMIT 5 ;";
+    $requete ="SELECT g.idG, b.nomG, COUNT(g.idG) AS value_occurrence FROM INTERPRÉTERg natural Left join GROUPEb 
+				GROUP BY idG ORDER BY value_occurrence DESC LIMIT 5 ;";
     $res = mysqli_query($connexion, $requete);
     $resultat = mysqli_fetch_all($res, MYSQLI_ASSOC);
     return $resultat;
 }
 
-
-
+//=============================================
+//récupération de tous les idV associés à une Chanson
+function get_idV_inter($connexion, $titreC)
+{
+	$requete = "SELECT DISTINCT idV FROM `CHANSON` NATURAL JOIN `INTERPRÉTER`
+				NATURAL JOIN `VERSION`v WHERE titreC = \"".$titreC."\" ;";
+	$prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère la seul valeur du tableau SQL
+    {
+        $res=$row['idV'];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
+    }
+    return $res;//renvoie le tableau $res
+}
+function get_idV_pro($connexion, $titreC)
+{
+	$requete = "SELECT DISTINCT idV FROM `CHANSON` NATURAL JOIN `PRODUIRE`
+				NATURAL JOIN `VERSION`v WHERE titreC = \"".$titreC."\" ;";
+	$prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère la seul valeur du tableau SQL
+    {
+        $res=$row['idV'];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
+    }
+    return $res;//renvoie le tableau $res
+}
+//Récupération de l'idV correspondant à la chanson sélectionnée
+function get_idV_from($connexion ,$titreLec)//nomChanson en parametres
+{
+	$requete = "SELECT idV FROM `LISTE_DE_LECTURE` NATURAL JOIN `JOUER` 
+				NATURAL JOIN `VERSION` WHERE idLec = \"".$titreLec."\" ;";
+	$prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère la seul valeur du tableau SQL
+    {
+        $res=$row['idV'];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
+    }
+    return $res;//renvoie le tableau $res
+    
+}
+function idV_common($connexion) // retourne l'idV désiré
+{
+	if(NULL == get_idV_inter($connexion, $titreC))
+	{ $idV = get_idV_pro($connexion, $titreC); }
+	else { $idV = get_idV_inter($connexion, $titreC);}
+	$TabLec = get_idV_from($connexion ,$titreLec);
+	$res="";
+    for($i=0; $d<count($idV); $i++){
+        if(in_array($idV[$i],$TabLec)){
+           $res=$res." ".$idV[$i] ;
+        }
+    }
+   $res = explode(" ",$res);
+   return $res;
+}
 //===============================================
 //supression d'une VERSION de Chanson dans une playlist
 function delete_chanson_from_playlist($connexion, $idV, $idLec) {
-    $requete ="DELETE  FROM JOUER 
-			   WHERE idLec = '.$idLec.' AND idV = '.$idv.'";
-    $res = mysqli_query($connexion, $requete);
+    $requete ="DELETE FROM JOUER WHERE idLec = $idLec AND idV = $idV;";
+    $res=mysqli_query($connexion,$requete);
+    mysqli_commit($connexion);
+    return $res;
+}
+
+//===============================================
+//supression d'une VERSION de Chanson dans une playlist
+function add_chanson_to_playlist($connexion, $idV, $idLec) {
+    $requete ="INSERT INTO JOUER (idV, idLec)VALUES($idV, $idLec);";
+    $res=mysqli_query($connexion,$requete);
+    mysqli_commit($connexion);
     return $res;
 }
 
@@ -1009,11 +1166,9 @@ function régulariser_playlist($connexion, $idLec) // fonction à appeler
 }
 // ==SUPRESSION D'UNE PLAYLIST ENTIERE============================
 //fonction principale à appeler :
-function supprimer_playlist($connexion, $idLec) // fonction à appeler
+function supprimer_playlist($connexion, $idLec, $idC) // fonction à appeler
 {
-	$requete ="DELETE  FROM `LISTE_DE_LECTURE` 
-			   WHERE idLec = '.$idLec.'; 
-			   DELETE  FROM `JOUER` 
+	$requete ="DELETE  FROM `JOUER` 
 			   WHERE idLec = '.$idLec.';";
 	$res = mysqli_query($connexion, $requete);
 	return $res;
@@ -1029,6 +1184,26 @@ function supprimer_chanson($connexion, $idC) // fonction à appeler
 			   WHERE idC = '.$idC.';";
 	$res = mysqli_query($connexion, $requete);
 	return $res;
+}
+
+//============== Nombre de chansons d'une Playlist ==========
+// fonction à appeler :
+function compte_chanson_playlist($connexion, $titreLec) {
+    $requete ="COUNT(v.idV) AS value_occurrence FROM LISTE_DE_LECTURE l NATURAL JOIN JOUER j NATURAL JOIN VERSION v 
+			   WHERE l.titreLec LIKE ".$titreLec." ;";
+    $res = mysqli_query($connexion, $requete);
+    return $res;
+}
+//===== Nombre de genres voulus dans une Playlist =====
+// fonction à appeler :
+function compte_genre_playlist($connexion, $titreLec, $nom_genre) {
+    $requete ="COUNT(g.nom_genre) AS value_occurrence FROM LISTE_DE_LECTURE l NATURAL JOIN JOUER NATURAL JOIN VERSION 
+			   NATURAL JOIN INTERPRETER NATURAL JOIN CHANSON NATURAL JOIN POSSEDER NATURAL JOIN GENRE g
+			   WHERE l.titreLec LIKE ".$titreLec." 
+			   AND g.nom_genre LIKE ".$nom_genre." ;";
+    $res = mysqli_query($connexion, $requete);
+    return $res;
+
 }
 //=================CALCUl DU SCORE DE RESSEMBLANCE DE PLAYLISTS=========================
 
@@ -1140,7 +1315,15 @@ function get_score_final($titre_pourcen, $durée_pourcen, $commun, $distinct, $r
 // selection un élément d'une table passé en paramètre
 function SELECT_E_WHERE_LIKE($connexion, $table, $element, $param1, $param2 ){
 
-    $requete = 'SELECT '.$element.' FROM '.$table.'WHERE'.$param1.' LIKE "'.$param2.'";';
+    $requete = 'SELECT '.$element.' FROM '.$table.' WHERE '.$param1.' LIKE "'.$param2.'";';
+    $res = mysqli_query($connexion, $requete);
+    return $res;
+}
+
+// selection un élément d'une table passé en paramètre
+function SELECT_E_WHERE_EQUAL($connexion, $table, $element, $param1, $param2 ){
+
+    $requete = 'SELECT '.$element.' FROM '.$table.' WHERE '.$param1.' = '.$param2.' ;';
     $res = mysqli_query($connexion, $requete);
     return $res;
 }
@@ -1153,10 +1336,6 @@ function max_limit($connexion, $table, $param_OUT, $param_IN, $limite, $ordre){
     $instances = mysqli_fetch_all($res, MYSQLI_ASSOC);
     return $instances;
 }
-
-
-
-
 
 //supprime une ligne d'une table
 function delete_ligne($connexion, $idtransmis, $ntable, $idtable) {

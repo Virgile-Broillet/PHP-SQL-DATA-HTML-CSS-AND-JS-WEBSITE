@@ -1,12 +1,16 @@
-
 <style>
 
 	h4{width:45em;}
 
 </style>
 
+<?php if(isset($message)) { ?>
+	<p style="background-color: yellow;"><?= $message ?></p>
+<?php } ?>
+
 <center>
 	<!-- AFFICHAGE DES PLAYLISTS -->
+
 	<table>
 		<tr>
 		 <th> identifiant </th>
@@ -24,51 +28,85 @@
 	</table>
 	
 <!-- DEBUT DE LA TABLE D'AFFICHAGE DES CONTENUS DE PLAYLISTS-->
-
 <table>
 <?php
-	if(isset($_POST['boutonChanson'])||isset($_POST['boutonSupprimer'])) 
+	if(isset($_POST['boutonChanson'])) 
 	{?>
-		</br></br>
-		<tr>
-			<th> Titre de la Chanson :</th>
-			<th> Playcount :</th>
-			<th> Skipcount :</th>
-			<th> Lastplayed :</th>
-			<th> Date :</th>
-			<th> Durée :</th>
-    	</tr>
+			</br></br>
+			<tr>
+				<th> Titre de la Chanson :</th>
+				<th> Playcount :</th>
+				<th> Skipcount :</th>
+				<th> Lastplayed :</th>
+				<th> Date :</th>
+				<th> Durée :</th>
+			</tr>
 
-		<?php
-			$nomPlaylist=$_POST['titreLec'];
-			$Tab_titre = get_chansons_playlist($connexion, 'titreC' ,$nomPlaylist);
-			$Tab_play = get_chansons_playlist($connexion, 'playcount' ,$nomPlaylist);
-			$Tab_skip = get_chansons_playlist($connexion, 'skipcount' ,$nomPlaylist);
-			$Tab_last = get_chansons_playlist($connexion, 'lastplayed' ,$nomPlaylist);
-			$Tab_date = get_chansons_playlist($connexion, 'dateV' ,$nomPlaylist);
-			$Tab_durée = get_chansons_playlist($connexion, 'Durée' ,$nomPlaylist);
-			$nb = count($Tab_titre); ?>
-			<h4>Information de la Playlist : <?php echo $nomPlaylist; ?></h4>
-		
-		<tr>
-			<?php for($i=0; $i<$nb; $i++){ 
-				$nombre = intval($Tab_last[$i]/1000);
-				if(empty($Tab_last[$i])||$Tab_last[$i]<1000){$valeur="Jouer Récemment (moins d'une seconde)";}
-					else{$valeur="Jouée il y a environ : ".$nombre." secondes";} ?>
-					
-				<td><?= $Tab_titre[$i] ?></td>
-				<td><?= $Tab_play[$i] ?></td>
-				<td><?= $Tab_skip[$i] ?></td>
-				<td><?= $valeur ?></td>
-				<td><?= $Tab_date[$i] ?></td>
-				<td><?= $Tab_durée[$i] ?> secondes</td>
-		</tr>
-			<?php } ?>	
+			<?php
+				$nomPlaylist=$_POST['titreLec'];
+				$idLec = get_chansons_playlist($connexion, 'idLec' ,$nomPlaylist);
+				setcookie('idLec', $idLec[0]);
+				setcookie('nomPlaylist', $nomPlaylist);
+				$Tab_titre = get_chansons_playlist($connexion, 'titreC' ,$nomPlaylist);
+				$Tab_play = get_chansons_playlist($connexion, 'playcount' ,$nomPlaylist);
+				$Tab_skip = get_chansons_playlist($connexion, 'skipcount' ,$nomPlaylist);
+				$Tab_last = get_chansons_playlist($connexion, 'lastplayed' ,$nomPlaylist);
+				$Tab_date = get_chansons_playlist($connexion, 'dateV' ,$nomPlaylist);
+				$Tab_durée = get_chansons_playlist($connexion, 'Durée' ,$nomPlaylist);
+				$nb = count($Tab_titre); ?>
+				<h4>Information de la Playlist : <?php echo $nomPlaylist; ?></h4>
+			
+			<tr>
+				<?php for($i=0; $i<$nb; $i++){ 
+					$nombre = intval($Tab_last[$i]/1000);
+					if(empty($Tab_last[$i])||$Tab_last[$i]<1000){$valeur="Jouer Récemment (moins d'une seconde)";}
+						else{$valeur="Jouée il y a environ : ".$nombre." secondes";} ?>
+						
+					<td><?= $Tab_titre[$i] ?></td>
+					<td><?= $Tab_play[$i] ?></td>
+					<td><?= $Tab_skip[$i] ?></td>
+					<td><?= $valeur ?></td>
+					<td><?= $Tab_date[$i] ?></td>
+					<td><?= $Tab_durée[$i] ?> secondes</td>
+			</tr> <?php } ?>
+		</table>
+		<!-- SUPPRESSION DE MUSIQUES -->
+		<div class="formulaire"> 
+		<form  method="post">
+			<h2> Supprimer une chanson de la Playlist </h2>
+			<select name="titreChanson" id="titreChanson">
+				<?php 
+				// $Tab_titre est le nom des chansons de la playlist
+				foreach($Tab_titre as $Tab) {  ?>
+					<option><?= $Tab ?></option> <!-- Chansons de la Playlist -->
+				<?php } ?>
+			</select>
+			</br></br>
+			<div class="button"><input type="submit" name="boutonSupprimer" value="Supprimer"/></div>
+		</form>	
+		</div>
+		</br></br>
+				<!-- Ajout DE MUSIQUES -->
+		<div class="formulaire" > 
+		<form  method="post" action="#">
+			<h2> ajouter une chanson à la Playlist </h2>
+			<select name="titre_ajouter" id="titre_ajouter" >
+				<?php 
+				// $Tab_songs est la table des chansons-versions
+				foreach($chanson as $song) {  ?>
+					<option><?= $song['titreC'] ?></option> <!-- Chansons de la BD -->
+				<?php } ?>
+			</select>
+			</br></br>
+			<div class="button"><input type="submit" name="boutonAjout" value="ajouter"/></div>
+		</form>	
+		</div>
+
+		</br></br>
+	<?php } ?>
 	
 	<!-- COMPARAISON DES PLAYLISTS -->
-	<?php 
-	}
-	
+	<?php
 	if(isset($_POST['boutonComparer'])) 
 	{?>
 		</br></br>
@@ -181,7 +219,8 @@
 			</select></br></br>
 			<div class="button"><input type="submit" name="boutonChanson" value="Valider"/></div>
 		</form>
-	</div>
+</div>
+
 	
 	<!-- DEUXIEME FORMULAIRE POUR COMPARER DEUX PLAYLISTS -->
 	

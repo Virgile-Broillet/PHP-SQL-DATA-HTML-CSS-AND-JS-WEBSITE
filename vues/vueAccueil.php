@@ -128,41 +128,58 @@
 		</div>
 
 		<script src="css/carousel.js"></script>
-
-</br></br>	<!-- TEXTE D'EXPLICATION DES DEMARCHES -->
-		<center>
-			<h5> Les objectifs de notre Site "Playlist Watcher" : </h5>
-		</center>
-	<h4><ul>
-		<li> PREMIERE FONCTIONALITE </li>
-		 <ul> Nous Avons réalisé un affichage avec un formulaire permettant d'insérer des chansons</br>
-			  directement dans la Base de données. Notre formulaire s'auto-actualise et contient </br>
-			  des paramètres pré-remplis, afin d'être facile d'utilisation. 					</ul>
-	     <ul> Notre formulaire est protégé contre les injections SQL, afin de protéger les données.</br>
-	          </ul>
-		<li> DEUXIEME FONCTIONALITE </li>
-		 <ul> Pour l'importation du jeu de données ...
-		 </ul>
-		<li> TROIXIEME FONCTIONALITE </li>
-		 <ul> La création d'une Playlist Aléatoire selon une durée voulue et un genre de préférence </br>
-		      Est rendue possible même si l'utilisateur n'a pas d'inspiration pour le nom de Playlist.</br>
-		      Vous ne nous croyez-pas ? écoutons ce que la Base de Données a à nous dire !  </ul>
-		 <ul> "Bonjour, Je suis La Base de Données, en ce moment je pense  <?echo nom_aléatoire(2);?> </br>
-		       Aussi, je crois que <?echo nom_aléatoire(9);?>
-		       C'est pourquoi <?echo nom_aléatoire(6);?> HEHEHE ! <?echo nom_aléatoire(4);?> " </ul>
-		<li> QUATRIEME FONCTIONALITE </li>
-		 <ul> La Gestion des Listes de Lectures Permet en tout D'afficher, comparer, modifier et ajouter</br>
-		      Des Playlists et leur Contenu. Nous avons aussi penser à supprimer les playlists dont le </br>
-		      contenu a été totalement éffacé.
-		 </ul>
-	</ul></h4>
+	
 		
-</br></br>
-
+    </br><!-- ON AFFICHE LE COMPTEUR ICI -->
 		<div id="compteur">
+		<center>
 			<?php include('static/encart.php'); ?>
+		</center>
 		</div>
 
+</br>	<!-- TEXTE D'EXPLICATION DES DEMARCHES -->
+		
+			<h5> Les objectifs de notre Site "<?= $nomSite ?>" : </h5>
+		
+	<div class="ACCUEIL">
+		<table>	
+		<tr>
+		<td>
+			<li> PREMIERE FONCTIONALITE </li></br>
+			 Nous Avons réalisé un affichage avec un formulaire permettant d'insérer des chansons
+				  directement dans la Base de données. Notre formulaire s'auto-actualise et contient
+				  des paramètres pré-remplis, afin d'être facile d'utilisation. 				
+			</br>Notre formulaire est protégé contre les injections SQL, afin de protéger les données.
+			</br> </br> 
+		</td>
+		<td>
+			<li> DEUXIEME FONCTIONALITE </li></br>
+			 Pour l'importation du jeu de données, nous avons des fonctions remplissant la Base de Données automatiquement depuis le modèle.
+			 Un maximum de tables ont été importées.
+			</br> </br> 
+		</td> 
+		<td>
+			<li> TROIXIEME FONCTIONALITE </li></br>
+			La création d'une Playlist Aléatoire selon une durée voulue et un genre de préférence 
+				  Est rendue possible même si l'utilisateur n'a pas d'inspiration pour le nom de Playlist.
+				  Vous ne nous croyez-pas ? Regardez ces magnifiques titres de Playlist !
+			</br> "<?= nom_aléatoire_GRP($connexion, " ");?> <?= nom_aléatoire_GENRE($connexion, "; ");?> <?= nom_aléatoire_SONG($connexion, " ");?>" ou encore "<?= nom_aléatoire_GRP($connexion, " ");?> <?= nom_aléatoire_GENRE($connexion, "; ");?> <?= nom_aléatoire_SONG($connexion, " ");?>" sympa n'est-ce pas ?
+			</br></br>
+		</td>
+		<td>
+			<li> QUATRIEME FONCTIONALITE </li></br>
+			  La Gestion des Listes de Lectures Permet en tout d'afficher, comparer, modifier et ajouter
+				  des Playlists et leur Contenu. 
+				  Nous avons aussi penser à supprimer les playlists dont le contenu a été totalement éffacé. 
+				  Le plus amusant c'est de pouvoir comparer les playlists entre elles et de comparer leur degré de similitude ! 
+				  je pense que si on compare une playlist avec elle-même, le score serait de 100 %. 
+				  Ca vaut le coup de vérifier !
+		</td>
+		</tr>
+		</table>
+	</div>
+		
 
-	</center>
+	
+</center>
 </main>

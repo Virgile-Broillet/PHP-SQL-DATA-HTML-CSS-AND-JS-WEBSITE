@@ -1,4 +1,4 @@
-<?php error_reporting(0); ?>
+<?php?>
 
 <?php if(isset($message)) { ?>
 	<p style="background-color: yellow;"><?= $message ?></p>
@@ -9,8 +9,32 @@ h2{
 	width:15em;
 }
 </style>
-
 <center>
+	
+	<table>
+		<tr>
+		 <th> iD </th>
+		 <th> Titre de la Chanson </th>
+		 <th> nom du Groupe </th>
+		 <th> Date </th>
+		 <th> numero_piste </th>
+		 
+		</tr>
+
+		<?php foreach($CHANSONS_interpretees as $song) { ?>
+		<tr>
+			<td><?= $song['idC'] ?> </td>
+			<td><?= $song['titreC'] ?></td>
+			<td><?= $song['nomG'] ?> </td>
+			<td><?= $song['date_création'] ?> </td>
+			<td><?= $song['numero_piste'] ?> </td>
+			
+		</tr>
+		<?php } ?>
+
+	</table>
+
+
 	<div class="formulaire">
 		<h2>Ajout d'une Chanson</h2>
 		<form method="post" action="#">
@@ -81,6 +105,19 @@ h2{
 			</br>
 
 			<div class="button"><input type="submit" name="boutonValider" value="Ajouter"/></div>
+		</form>
+	</div>
+		</br>
+		
+	<div class="formulaire">
+		<h2>Supprimer une Chanson</h2>
+		<form method="post" action="#">
+			<select name="nomchanson" id="nomchanson">
+				<?php foreach($chanson as $song) { ?>
+					<option><?= $song['titreC'] ?></option>
+				<?php } ?>
+			</select>
+			<div class="button"><input type="submit" name="boutonSuppr" value="Supprimer"/></div>
 		</form>
 	</div>
 </center>

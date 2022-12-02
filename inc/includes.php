@@ -3,7 +3,7 @@
 include '../modele/modele.php';
 
 $nomSite = "Nuggets Musique";
-$nbr = rand(0,9); // ici on va générer une Baseline aléatoire
+$nbr = rand(0,10); // ici on va générer une Baseline aléatoire
 $date = date("Y-m-d");
 
 switch($nbr){
@@ -42,7 +42,7 @@ switch($nbr){
 	case 9:
 		$baseline = "Le Sage mets la charue pour faire de deux coups une pierre.";
 	break;
-
+		// cas numéro 10 :
 	default:
 		$baseline = "Aujourd'hui, nous somme le : ".$date;
 }
