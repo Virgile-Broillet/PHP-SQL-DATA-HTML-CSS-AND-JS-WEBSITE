@@ -22,8 +22,15 @@ if($album == null || count($album) == 0) {
 
 if(isset($_POST['boutonValider'])) { // formulaire soumis
 
+	if(empty($_POST['nomchanson']))
+	{
+		$i = rand(0,10);
+		$nomChanson = nom_aléatoire($i);
+	}
+	else 
+	{ 
+	$nomChanson = $_POST['nomchanson']; }
 	$nomGroupe = $_POST['nomgroupe']; // recuperation de la valeur saisie
-	$nomChanson = $_POST['nomchanson'];
 	$nom_genre = $_POST['genre'];
 	$année = $_POST['date'];
 	$durée = $_POST['durée'];
@@ -83,7 +90,7 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 			if($insertion_version2 && $insertion_inter2 == TRUE){
 				$message = "Une Chanson existe déjà avec ce nom ($nomChanson), une nouvelle version à été insérée.";
 			}else{
-				$message = "Erreur lors de l'insertion de la Chanson 2 $nomChanson.";
+				$message = "Erreur lors de l'insertion de la Chanson $nomChanson.";
 			}
 		}
 	}

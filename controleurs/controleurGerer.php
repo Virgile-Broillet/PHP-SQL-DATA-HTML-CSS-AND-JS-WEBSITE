@@ -8,7 +8,14 @@ $connexion = getConnexionBD(); // connexion à la BD
 	{
 		$message .= "Aucune Playlist n'a été trouvée dans la base de données !"; 
 	}
-
+/*
+	isset($_POST['boutonSupprimer'])
+	{
+		
+		delete_chanson_from_playlist($connexion, $idV, $idLec);
+		
+		régulariser_playlist($connexion, $idLec);
+	}*/
 
 	if(isset($_POST['boutonComparer'])) 
 	    {
@@ -18,4 +25,5 @@ $connexion = getConnexionBD(); // connexion à la BD
 	
 	
 		}
+	
 ?>

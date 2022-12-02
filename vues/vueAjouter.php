@@ -15,7 +15,7 @@ h2{
 		<h2>Ajout d'une Chanson</h2>
 		<form method="post" action="#">
 			<label for="nomchanson"></label>
-			<div class="gauche"><p type="Nom de la Chanson :"> <input class="bb" type="text" name="nomchanson" id="nomchanson" placeholder="Mega Disco Giga Disto" required /></div></p>
+			<div class="gauche"><p type="Nom de la Chanson :"> <input class="bb" type="text" name="nomchanson" id="nomchanson" placeholder="Mega Disco Giga Disto" /></div></p>
 			<div class="droite"><p type="Date de Sortie de la Chanson :"> <input class="bb" type="number" name="date" id="date" placeholder="2022" min="1950" max="2022" required/></div></p></br>
 			<div class="gauche"><p type="Durée de la Chanson :"> <input class="bb" type="number" name="durée" id="durée" placeholder="244 means 244 seconds, 4m06s" min="1" required /></div></p>
 			<div class="droite"><p type="Chemin du fichier de la chanson :"> <input class="bb" type="text" name="chemin" id="chemin" placeholder="E:/.../....mp3 or https://..." required/></div></p></br>

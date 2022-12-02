@@ -6,10 +6,12 @@ ini_set('display_startup_errors', 1); // affiche les erreurs (au cas où)
 error_reporting(E_ALL); // affiche les erreurs (au cas où)
 require('inc/config-bd.php'); // fichier de configuration d'accès à la BD
 require('modele/modele.php'); // inclut le fichier modele
-require('inc/includes.php'); // inclut des constantes et fonctions du site (nom, slogan)
 require('inc/routes.php'); // fichiers de routes
 
 $connexion = getConnexionBD(); // connexion à la BD
+
+require('inc/includes.php'); // inclut des constantes et fonctions du site (nom, slogan)
+
 ?>
 <!DOCTYPE html>
 <html>

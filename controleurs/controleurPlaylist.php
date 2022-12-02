@@ -22,7 +22,29 @@
 			$nom1 = nom_aléatoire_GRP($connexion, " ");
 			$nom2 = nom_aléatoire_GENRE($connexion, "; ");
 			$nom3 = nom_aléatoire_SONG($connexion, " ");
+			$nbr = rand(0,5); // on va mélanger les 3 résultats au hasard
+			switch ($nbr) // 3 éléments donc 3 factoriel permutations possibles = 6 choix au total
+			 {
+			case 0:
 			$titreLec = $nom1." ".$nom2." ".$nom3;
+			break;
+			case 1:
+			$titreLec = $nom2." ".$nom1." ".$nom3;
+			break;
+			case 2:
+			$titreLec = $nom1." ".$nom3." ".$nom2;
+			break;
+			case 3:
+			$titreLec = $nom2." ".$nom3." ".$nom1;
+			break;
+			case 4:
+			$titreLec = $nom3." ".$nom2." ".$nom1;
+			break;
+			case 5:
+			$titreLec = $nom3." ".$nom1." ".$nom2;
+			break;
+			}
+			
 		}
 
 		if(VERIF($titreLec))

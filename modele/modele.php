@@ -681,9 +681,21 @@ function search_titreC($connexion, $nomChanson) {
     $prepare = mysqli_query($connexion, $requete);
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
-        $res = $row['titreC']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idC' pour pouvoir y accéder
+        $res = $row['titreC']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreC' pour pouvoir y accéder
     }
     return $res; //resort le tableau titreC avec UNE SEUL musique (LIMIT 1)
+}
+
+//recherche le nom d'un genre selon le titre d'une chanson
+function search_nom_genre($connexion, $nomChanson) {
+    $requete = "SELECT nom_genre FROM CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
+    {
+        $res = $row['nom_genre']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'nom_genre' pour pouvoir y accéder
+        $nom = explode("; ", $res);
+    }
+    return $nom; //resort le tableau nom_genre avec UNE SEUL musique (LIMIT 1)
 }
 
 //recherche la date d'une chanson selon le nom de la chanson
@@ -728,16 +740,6 @@ function search_nomA($connexion, $nomChanson) {
         $res = $row['titreA']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreA' pour pouvoir y accéder
     }
     return $res; //resort le tableau titreA avec UN SEUL nom d'album (LIMIT 1)
-}
-
-
-// fonction pour obtenir les n plus grandes/petites valeurs
-function max_limit($connexion, $table, $param_OUT, $param_IN, $limite, $ordre){
-
-    $requete = 'SELECT '.$param_OUT.' FROM '.$table.' ORDER BY '.$param_IN.' '.$ordre.' LIMIT '.$limite.' ;';
-    $res = mysqli_query($connexion, $requete);
-    $instances = mysqli_fetch_all($res, MYSQLI_ASSOC);
-    return $instances;
 }
 
 //insert dans la BD dans la Table LISTE_DE_LECTURE avec l'id de la playlist $idLec, le nom de la playlist $titreLec
@@ -877,6 +879,10 @@ function insertInclure($connexion, $idLec, $idA, $numero_piste)
     return $res;
 }
 
+
+
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=DEBUT FONCTION NOM ALEATOIRE
 //récupère un nom au hasard de groupe dans la BD, $sep est le séparateur de la table en l'occurance " " ici
 function nom_aléatoire_GRP($connexion, $sep) {
     $requete ="SELECT nomG FROM GROUPE ORDER BY RAND() LIMIT 1 ";
@@ -886,7 +892,9 @@ function nom_aléatoire_GRP($connexion, $sep) {
         $res=$row["nomG"]; //insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'nomG' pour pouvoir y accéder
         $nom=explode($sep, $res);//usage de la fonction explode qui prend en paramètre un séparateur $sep, et un nom à séparer
     }
-    return $nom[0]; //renvoie la première partie du nom du groupe (tout ce qui est avant " ")
+    $max = count($nom)-1;
+    $nom1=$nom[rand( 0, $max)];// renvoi un mot au hasard parmi la chaîne
+    return $nom1; //renvoie la première partie du nom du groupe (tout ce qui est avant " ")
 }
 
 //récupère un nom de genre au hasard dans la BD, $sep est le séparateur de la table en l'occurance "; " ici
@@ -898,7 +906,9 @@ function nom_aléatoire_GENRE($connexion, $sep) {
         $res=$row["nom_genre"];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'nom_genre' pour pouvoir y accéder
         $nom=explode($sep, $res);//usage de la fonction explode qui prend en paramètre un séparateur $sep, et un nom à séparer
     }
-    return $nom[0]; //renvoie la première partie du nom du genre (tout ce qui est avant "; ")
+    $max = count($nom)-1;
+    $nom1=$nom[rand( 0, $max)];// renvoi un mot au hasard parmi la chaîne
+    return $nom1; //renvoie la première partie du nom du genre (tout ce qui est avant "; ")
 }
 
 //récupère un nom de chanson au hasard dans la BD, $sep est le séparateur de la table en l'occurance " " ici
@@ -910,8 +920,43 @@ function nom_aléatoire_SONG($connexion, $sep) {
         $res=$row["titreC"];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreC' pour pouvoir y accéder
         $nom=explode($sep, $res);//usage de la fonction explode qui prend en paramètre un séparateur $sep, et un nom à séparer
     }
-    return $nom[0];//renvoie la première partie du nom de la chanson (tout ce qui est avant " ")
+    $max = count($nom)-1;
+    $nom1=$nom[rand( 0, $max)];// renvoi un mot au hasard parmi la chaîne
+    return $nom1;//renvoie le nom
 }
+
+// on Tire au hasard Parmi Les Genres, Groupes et Chansons.
+function nom_aléatoire_choix($connexion)//précondition : Aucune, les tables Groupe, Genre et Chanson ne sont pas vides cependant.
+{
+	$nombre = rand(0,2);
+	switch($nombre){
+		case 0:
+	        $nom = nom_aléatoire_GRP($connexion, " ");
+	    break;
+
+		case 1:
+            $nom = nom_aléatoire_GENRE($connexion, "; ");
+        break;
+
+		case 2:
+            $nom = nom_aléatoire_SONG($connexion, " ");
+        break;
+	}
+
+	return $nom;
+}//post-condition : retourne une chaîne de carractères ( un mot )
+
+function nom_aléatoire($connexion, $longueur)//précondition : $longueur > 0  FONCTION A APPELER
+{
+	for($i=0; $i<$longueur; $i++)
+	{
+		$mot = nom_aléatoire_choix($connexion);
+		$mot_final = $mot_final." ".$mot;
+	}
+	return $mot_final;
+}//post-condition : retourne une chaîne de carractères ( une phrase )
+//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=FIN FONCTION NOM_ALEATOIRE
+
 
 //récupère l'id de la PLaylist selon son nom, $nom (permet aussi de vérifier si la playlist existe)
 function get_id_By_NomPlaylist($connexion, $nom){
@@ -925,20 +970,172 @@ function get_id_By_NomPlaylist($connexion, $nom){
 }
 
 
-//supprime une ligne d'une table
-function delete_ligne($connexion, $idtransmis, $ntable, $idtable) {
-    $requete = "DELETE FROM $ntable WHERE $idtable = $idtransmis;";
-    $res = mysqli_query($connexion, $requete);
-    mysqli_commit($connexion);
-    return $res;
-}
-
 function compte_chanson_groupe($connexion) {
     $requete ="SELECT g.idG, b.nomG, COUNT(g.idG) AS value_occurrence FROM INTERPRÉTERg natural Left join GROUPEb GROUP BY idG ORDER BY value_occurrence DESC LIMIT 5 ;";
     $res = mysqli_query($connexion, $requete);
     $resultat = mysqli_fetch_all($res, MYSQLI_ASSOC);
     return $resultat;
 }
+
+
+
+//===============================================
+//supression d'une VERSION de Chanson dans une playlist
+function delete_chanson_from_playlist($connexion, $idV, $idLec) {
+    $requete ="DELETE  FROM JOUER 
+			   WHERE idLec = '.$idLec.' AND idV = '.$idv.'";
+    $res = mysqli_query($connexion, $requete);
+    return $res;
+}
+
+//===============================================
+//SI la playlist n'a plus de chanson :
+function playlist_vide($connexion, $idLec)
+{
+	$requete ="SELECT  FROM JOUER 
+			   WHERE idLec = '.$idLec.'; ";
+    $res = mysqli_query($connexion, $requete);
+    return $res;
+}
+// LA playlist est vide : on la supprime
+function régulariser_playlist($connexion, $idLec) // fonction à appeler
+{	if( playlist_vide($connexion, $idLec) == NULL )
+	{
+		$requete ="DELETE * FROM `LISTE_DE_LECTURE` 
+			   WHERE idLec = '.$idLec.'; ";
+		$res = mysqli_query($connexion, $requete);
+		return $res;
+	}
+}
+// ==SUPRESSION D'UNE PLAYLIST ENTIERE============================
+//fonction principale à appeler :
+function supprimer_playlist($connexion, $idLec) // fonction à appeler
+{
+	$requete ="DELETE  FROM `LISTE_DE_LECTURE` 
+			   WHERE idLec = '.$idLec.'; 
+			   DELETE  FROM `JOUER` 
+			   WHERE idLec = '.$idLec.';";
+	$res = mysqli_query($connexion, $requete);
+	return $res;
+}
+
+// ==========SUPRESSION D'UNE CHANSON============================
+//fonction principale à appeler :
+function supprimer_chanson($connexion, $idC) // fonction à appeler
+{
+	$requete ="DELETE  FROM `LISTE_DE_LECTURE` 
+			   WHERE idC = '.$idC.'; 
+			   DELETE  FROM `JOUER` 
+			   WHERE idC = '.$idC.';";
+	$res = mysqli_query($connexion, $requete);
+	return $res;
+}
+//=================CALCUl DU SCORE DE RESSEMBLANCE DE PLAYLISTS=========================
+
+function get_similitude_durees($durée1, $durée2) // nombre entre 0 et 100
+{
+    if($durée1<$durée2)
+    {
+        $simili = round(($durée1/$durée2)*100, 2);
+    }else{
+        $simili = round(($durée2/$durée1)*100, 2);
+    }
+
+	return $simili;
+}
+
+function get_similitude_titres($connexion, $Tab_titre1, $nb1, $Tab_titre2, $nb2) // nombre entre 0 et 100
+{
+    $valeur = 0;
+
+    for($a=0; $a<$nb1; $a++){
+        $Tab=search_nom_genre($connexion, $Tab_titre1[$a]);
+    }
+    
+    for($b=0; $b<$nb2; $b++){
+        $Tab2=search_nom_genre($connexion, $Tab_titre2[$b]);
+    }
+
+    for($d=0; $d<count($Tab2); $d++){
+        if(in_array($Tab2[$d],$Tab)){
+            $valeur++;
+        }
+    }
+
+    for($c=0; $c<count($Tab); $c++){
+        if(in_array($Tab[$c],$Tab2)){
+            $valeur++;
+        }
+    }
+
+    return round(($valeur/(count($Tab2)+count($Tab))*100), 2);
+}
+
+function get_musique_commun($connexion, $Tab_titre1, $nb1, $Tab_titre2, $nb2)// nombre entre 0 et n (nombre de musique en commun)
+{
+    $valeur=0;
+    for($i=0; $i<$nb1; $i++){
+        for($j=0; $j<$nb2; $j++){
+            if($Tab_titre1[$i] == $Tab_titre2[$j]){
+                $valeur++;
+            }
+        }
+    }
+	return $valeur;
+}
+
+function get_musique_récente($connexion, $Tab_Jouer, $nb2 ,$Tab_Jouer2, $nb3){
+    $valeur=0;
+    for($i=0; $i<$nb2; $i++){
+        if($Tab_Jouer[$i]<1000){
+            $valeur++;
+        }
+    }
+    
+    for($j=0; $j<$nb3; $j++){
+        if($Tab_Jouer2[$j]<1000){
+            $valeur++;
+        }
+    }
+
+    return $valeur;
+}
+
+function get_score_final($titre_pourcen, $durée_pourcen, $commun, $distinct, $récent, $nb2, $nb3)// nombre entre 0 et  100 (pourcentage )
+{
+    $final = 0;
+    $somme = $nb2+$nb3;
+    $demi_somme = intval($somme/2);
+    if($commun == 0){
+        if($distinct == 0){
+            $final = (($titre_pourcen+$durée_pourcen)/3);
+        }elseif($distinct < $demi_somme){
+            $final = (($titre_pourcen+$durée_pourcen)/3.2);
+        }elseif($distinct > $demi_somme){
+            $final = (($titre_pourcen+$durée_pourcen)/3.5);
+        }
+    }elseif($commun < $demi_somme){
+        if($distinct == 0){
+            $final = (($titre_pourcen+$durée_pourcen)/2);
+        }elseif($distinct < $demi_somme){
+            $final = (($titre_pourcen+$durée_pourcen)/2.5);
+        }elseif($distinct > $demi_somme){
+            $final = (($titre_pourcen+$durée_pourcen)/2.7);
+        }
+    }elseif($commun >= $demi_somme){
+        if($distinct == 0){
+            $final = (($titre_pourcen+$durée_pourcen)/2);
+        }elseif($distinct < $demi_somme){
+            $final = (($titre_pourcen+$durée_pourcen)/2.3);
+        }elseif($distinct > $demi_somme){
+            $final = (($titre_pourcen+$durée_pourcen)/2.5);
+        }
+    }
+	return round($final, 2);
+}
+
+
+//<>===================<><>( FONCTIONS REUTILISABLES )<><>=========================<>
 
 // selection un élément d'une table passé en paramètre
 function SELECT_E_WHERE_LIKE($connexion, $table, $element, $param1, $param2 ){
@@ -948,4 +1145,26 @@ function SELECT_E_WHERE_LIKE($connexion, $table, $element, $param1, $param2 ){
     return $res;
 }
 
+// fonction pour obtenir les n plus grandes/petites valeurs
+function max_limit($connexion, $table, $param_OUT, $param_IN, $limite, $ordre){
+
+    $requete = 'SELECT '.$param_OUT.' FROM '.$table.' ORDER BY '.$param_IN.' '.$ordre.' LIMIT '.$limite.' ;';
+    $res = mysqli_query($connexion, $requete);
+    $instances = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    return $instances;
+}
+
+
+
+
+
+//supprime une ligne d'une table
+function delete_ligne($connexion, $idtransmis, $ntable, $idtable) {
+    $requete = "DELETE FROM $ntable WHERE $idtable = $idtransmis;";
+    $res = mysqli_query($connexion, $requete);
+    mysqli_commit($connexion);
+    return $res;
+}
+		// NE PAS DEPLACER ( ON LAISSE EN BAS )
+//<>=======================---------------------------==============================<>
 ?>
