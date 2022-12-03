@@ -34,19 +34,19 @@
 	<tr>
 		<th> Identifiant :</th>
 		<th> Nom du Groupe :</th>
-		<th> Membres avec leur date d'arrivée : </th>
+		<th> Nom de Scène des Musiciens : </th>
 	</tr>
 		
-<?php foreach($groupe as $groupe) { ?>
+<?php foreach($groupe as $groupe) { 
+	$membre = get_info_member($connexion, $groupe['idG']);?>
    <tr>
 	<td><?= $groupe['idG'] ?></td>
 	<td><?= $groupe['nomG'] ?> </td>
-	<td>
-		<? 
-		$membre = get_info_member($connexion, $groupe['idG']);
+	<td> /
+		<?php 
 		foreach($membre as $mbr){ ?>
-		<td> <?= $mbr['nomM']?> <?= $mbr['prenomM']?> <?= $mbr['date_debut']?></td>
-		<? } ?>
+		<?= $mbr['nom_de_scène'] ?> /
+		<?php } ?>
 	</td>
    </tr>
 <?php } ?>

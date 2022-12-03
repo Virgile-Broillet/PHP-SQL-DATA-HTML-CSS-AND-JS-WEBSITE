@@ -31,7 +31,7 @@ $connexion = getConnexionBD(); // connexion à la BD
 		$nom = $_COOKIE['nomPlaylist'];
 		if(delete_chanson_from_playlist($connexion, $idV, $idLec)){
 			$message .= "La Chanson ".$nomChanson." a bien été supprimé de la playlist ".$nom." !";
-		};
+		}
 	}
 
 // FORMULAIRE D'AJOUT DE MUSIQUE DANS UNE PLAYLIST
@@ -44,6 +44,6 @@ if(isset($_POST['boutonAjout']))
 		$nom = $_COOKIE['nomPlaylist'];
 		if(add_chanson_to_playlist($connexion, $idV, $idLec)){
 			$message .= "La Chanson ".$nomChanson." a bien été ajouté à la playlist ".$nom." !";
-		};
+		}
 	}
 ?>

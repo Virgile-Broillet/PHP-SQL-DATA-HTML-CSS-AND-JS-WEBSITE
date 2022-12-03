@@ -36,7 +36,7 @@
 			
 			<?php  $tab = max_playcount($connexion);?>
 			<?= $tab[0] ?> avec 
-			<?= $tab[1] ?> secondes
+			<?= $tab[1] ?> écoutes
 
 			</br></br>
 

@@ -416,20 +416,22 @@ function get_last_songs_by_idC($connexion, $limit){
 
 function get_info_member($connexion, $idG)
 {
-	$requete = "SELECT * FROM `MUSICIEN` NATURAL JOIN `FAIRE_PARTIE`p
-				NATURAL JOIN `PERIODE` NATURAL JOIN `GROUPE`g
-				WHERE g.idG = $idG ;"; 
-    $res = mysqli_query($connexion, $requete);
-    $result = mysqli_fetch_all($res, MYSQLI_ASSOC);
+	$requete = "SELECT nom_de_scène FROM `MUSICIEN` NATURAL JOIN `FAIRE_PARTIE`
+				NATURAL JOIN `PERIODE` NATURAL JOIN `GROUPE`
+				WHERE idG = $idG ;"; 
+    $prepare = mysqli_query($connexion, $requete);
+    $result = mysqli_fetch_all($prepare, MYSQLI_ASSOC);
     return $result;
 }
 
 function delete_song($connexion, $nom)
 {
-	$idC = SELECT_E_WHERE_LIKE($connexion, "`CHANSON`", "idC", "titreC", $nom );
+	$idC = SELECT_E_WHERE_LIKE($connexion, "`CHANSON`", "idC", "titreC", $nom )[0];
 	if($idC != NULL )
 	{
-	$requete = "DELETE FROM `POSSÉDER` WHERE idC = ".$idC."; DELETE FROM `INTERPRÉTER` WHERE idC = ".$idC."; DELETE FROM `CHANSONS` WHERE idC = ".$idC." ;"; 
+	$requete = "DELETE FROM `POSSÉDER` WHERE idC = $idC ; 
+				DELETE FROM `INTERPRÉTER` WHERE idC = $idC ; 
+				DELETE FROM `CHANSONS` WHERE idC = $idC ;"; 
     $res = mysqli_query($connexion, $requete);
     mysqli_commit($connexion);
 	return "SUPPRIME";
@@ -730,6 +732,10 @@ function insertAlbum($connexion, $idA, $titreA, $year, $producer) {
 function search_titreC($connexion, $nomChanson) {
     $requete = "SELECT titreC FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
+    if($prepare==false){
+        $requete = "SELECT titreC FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE '"."$nomChanson"."' LIMIT 1 ;";
+        $prepare = mysqli_query($connexion, $requete);
+    }
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
         $res = $row['titreC']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreC' pour pouvoir y accéder
@@ -741,6 +747,10 @@ function search_titreC($connexion, $nomChanson) {
 function search_nom_genre($connexion, $nomChanson) {
     $requete = "SELECT nom_genre FROM CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
+    if($prepare==false){
+        $requete = "SELECT nom_genre FROM CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE titreC LIKE '"."$nomChanson"."' LIMIT 1 ;";
+        $prepare = mysqli_query($connexion, $requete);
+    }
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
         $res = $row['nom_genre']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'nom_genre' pour pouvoir y accéder
@@ -753,6 +763,10 @@ function search_nom_genre($connexion, $nomChanson) {
 function search_dateC($connexion, $nomChanson) {
     $requete = "SELECT date_création FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
+    if($prepare==false){
+        $requete = "SELECT date_création FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE '"."$nomChanson"."' LIMIT 1 ;";
+        $prepare = mysqli_query($connexion, $requete);
+    }
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
         $res = $row['date_création']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'date_création' pour pouvoir y accéder
@@ -764,6 +778,10 @@ function search_dateC($connexion, $nomChanson) {
 function search_typeC($connexion, $nomChanson) {
     $requete = "SELECT typec FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
+    if($prepare==false){
+        $requete = "SELECT typec FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE '"."$nomChanson"."' LIMIT 1 ;";
+        $prepare = mysqli_query($connexion, $requete);
+    }
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
         $res = $row['typec']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'typec' pour pouvoir y accéder
@@ -775,6 +793,10 @@ function search_typeC($connexion, $nomChanson) {
 function search_nomG($connexion, $nomChanson) {
     $requete = "SELECT nomG FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
+    if($prepare==false){
+        $requete = "SELECT nomG FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN GROUPE WHERE titreC LIKE '"."$nomChanson"."' LIMIT 1 ;";
+        $prepare = mysqli_query($connexion, $requete);
+    }
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
         $res = $row['nomG']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'nomG' pour pouvoir y accéder
@@ -786,6 +808,10 @@ function search_nomG($connexion, $nomChanson) {
 function search_nomA($connexion, $nomChanson) {
     $requete = "SELECT titreA FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN ALBUM WHERE titreC LIKE "."\"$nomChanson\""." LIMIT 1 ;"; //cette fusion de guillemets de concatenage et de backslash permet à la valeur de contenir des guillemets, des apostrophes...
     $prepare = mysqli_query($connexion, $requete);
+    if($prepare==false){
+        $requete = "SELECT titreA FROM CHANSON NATURAL JOIN INTERPRÉTER NATURAL JOIN ALBUM WHERE titreC LIKE '"."$nomChanson"."' LIMIT 1 ;";
+        $prepare = mysqli_query($connexion, $requete);
+    }
     while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
         $res = $row['titreA']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'titreA' pour pouvoir y accéder
@@ -900,6 +926,72 @@ function SQL_TO_TAB($connexion, $nomGenre, $durée, $nb_ligne, $idLec ) //nb_lig
     //appel à la fonction GET_MOYENNE
     GET_MOYENNE($TabDurée, $durée, $connexion, $nomGenre, $nb_ligne, $TabTitre, $idLec, $TabIDV, $TabIDA, $TabNUM_PISTE);
 }
+
+
+
+
+
+// COPIE POUR REUSSIR L'INSERTION DE VERSIONS AVEC DES ATTRIBUTS
+// DEFINIS POUR CREER UNE PLAYLIST
+function SQL_TO_TAB_PLAYLIST($connexion, $nomGenre, $durée, $nb_ligne, $idLec, $radio ) //nb_ligne est défini arbitrairement il sera incrémenté ou décrémenter dans GET_MOYENNE
+{   //Définition des 5 tableaux qui accueilleront mes résultats    // VERSION PAR DEFAUT
+    $TabDurée = array();
+    $TabTitre = array();
+    $TabIDV = array();
+    $TabIDA = array();
+    $TabNUM_PISTE = array();
+    $VERSION = '`VERSION`';
+								// $radio = le bouton radio
+	if($radio == 2){	
+		$VERSION = ' (SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE playcount > 15) v ';
+		
+	}elseif($radio == 3){	
+		$VERSION = ' (SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE skipcount <8 ) v ';
+		
+	}elseif($radio == 4){ 	
+		$VERSION = ' (SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE lastplayed < 100 || lastplayed IS NULL ) v ';
+		
+	}elseif($radio == 1){ 
+		$VERSION = ' VERSION ';// $radio vaudra toujours "VERSION" par défaut	
+	} 
+		
+    if($nomGenre=='Tous les genres ( au hasard )'){
+        //Si le nom de Genre est "Tous les genre ..." Alors ma fonction me rangera au hasard TOUTES les Musiques de tous genre
+        $requete = 'WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM '.$VERSION.' NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T';
+    }elseif($nomGenre=='Classical'){
+        //Si le nom de Genre est "Classical" Alors ma fonction me rangera au hasard TOUTES les Musiques dont le nom_genre contient le mot 'Classical'
+        $requete = 'WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY nom_genre) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM '.$VERSION.' NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE %Class% || nom_genre > Class )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T';
+    }else{
+        //Sinon, ma fonction me rangera au hasard TOUTEs les musiques dont le nom_genre contient le mot $nomGenre
+        $requete = 'WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY nom_genre) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM '.$VERSION.' NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE %$nomGenre% || nom_genre > $nomGenre )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T';
+    }
+
+    //préparation triviale de la requete ( triviale ? j'y crois pas haha ) 
+    $prepare = mysqli_query($connexion, $requete);
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs des 5 tableaux retournés par SQL
+    {
+        //remplis les tableau un par un avec les données correspondantes
+        $TabDurée[] = $row['Durée']; 
+        $TabTitre[] = $row['titreC'];
+        $TabIDV[] = $row['idV'];
+        $TabIDA[] = $row['idA'];
+        $TabNUM_PISTE[] = $row['numero_piste'];
+    }
+
+    //supprime la dernière case des tableaux qui est en trop, car le temps $durée est dépassé
+    array_pop($TabDurée);
+    array_pop($TabTitre);
+    array_pop($TabIDV);
+    array_pop($TabIDA);
+    array_pop($TabNUM_PISTE);
+
+    //appel à la fonction GET_MOYENNE
+    GET_MOYENNE($TabDurée, $durée, $connexion, $nomGenre, $nb_ligne, $TabTitre, $idLec, $TabIDV, $TabIDA, $TabNUM_PISTE);
+}
+
+
+
+
 
 //retourne la durée de la playlist et incrémente ou non le nb de ligne si cela est necessaire
 function GET_MOYENNE($TabDurée, $temps, $connexion, $nomGenre, $nb_ligne, $TabTitre, $idLec, $TabIDV, $TabIDA, $TabNUM_PISTE) //variables précédemment définis dans SQL_TO_TAB
@@ -1079,38 +1171,35 @@ function compte_chanson_groupe($connexion) {
 //récupération de tous les idV associés à une Chanson
 function get_idV_inter($connexion, $titreC)
 {
-	$requete = "SELECT DISTINCT idV FROM `CHANSON` NATURAL JOIN `INTERPRÉTER`
-				NATURAL JOIN `VERSION`v WHERE titreC = \"".$titreC."\" ;";
+	$requete = "SELECT DISTINCT idV FROM `CHANSON` NATURAL JOIN `INTERPRÉTER` 
+				NATURAL JOIN `VERSION` WHERE titreC LIKE \"".$titreC."\" ;";
 	$prepare = mysqli_query($connexion, $requete);
-    while($row=mysqli_fetch_assoc($prepare))//récupère la seul valeur du tableau SQL
+    while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
-        $res=$row['idV'];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
+        $res = $row['idV']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
     }
-    return $res;//renvoie le tableau $res
+    return $res;
 }
 function get_idV_pro($connexion, $titreC)
 {
-	$requete = "SELECT DISTINCT idV FROM `CHANSON` NATURAL JOIN `PRODUIRE`
-				NATURAL JOIN `VERSION`v WHERE titreC = \"".$titreC."\" ;";
-	$prepare = mysqli_query($connexion, $requete);
-    while($row=mysqli_fetch_assoc($prepare))//récupère la seul valeur du tableau SQL
+	$requete = "SELECT DISTINCT idV FROM `CHANSON` NATURAL JOIN `PRODUIRE` 
+				NATURAL JOIN `VERSION` WHERE titreC LIKE \"".$titreC."\" ;";
+	while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
-        $res=$row['idV'];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
+        $res = $row['idV']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
     }
-    return $res;//renvoie le tableau $res
+    return $res;
 }
 //Récupération de l'idV correspondant à la chanson sélectionnée
 function get_idV_from($connexion ,$titreLec)//nomChanson en parametres
 {
 	$requete = "SELECT idV FROM `LISTE_DE_LECTURE` NATURAL JOIN `JOUER` 
 				NATURAL JOIN `VERSION` WHERE idLec = \"".$titreLec."\" ;";
-	$prepare = mysqli_query($connexion, $requete);
-    while($row=mysqli_fetch_assoc($prepare))//récupère la seul valeur du tableau SQL
+	while($row=mysqli_fetch_assoc($prepare))//récupère toutes les valeurs du tableau SQL
     {
-        $res=$row['idV'];//insère la valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
+        $res = $row['idV']; //insère les valeur du tableau SQL dans un tableau php nommé $res avec comme nom de colomne 'idV' pour pouvoir y accéder
     }
-    return $res;//renvoie le tableau $res
-    
+    return $res;
 }
 function idV_common($connexion) // retourne l'idV désiré
 {
@@ -1130,8 +1219,8 @@ function idV_common($connexion) // retourne l'idV désiré
 //===============================================
 //supression d'une VERSION de Chanson dans une playlist
 function delete_chanson_from_playlist($connexion, $idV, $idLec) {
-    $requete ="DELETE FROM JOUER WHERE idLec = $idLec AND idV = $idV;";
-    $res=mysqli_query($connexion,$requete);
+    $requete = "DELETE FROM JOUER WHERE idLec = $idLec AND idV = $idV;";
+    $res = mysqli_query($connexion, $requete);
     mysqli_commit($connexion);
     return $res;
 }
@@ -1139,8 +1228,8 @@ function delete_chanson_from_playlist($connexion, $idV, $idLec) {
 //===============================================
 //supression d'une VERSION de Chanson dans une playlist
 function add_chanson_to_playlist($connexion, $idV, $idLec) {
-    $requete ="INSERT INTO JOUER (idV, idLec)VALUES($idV, $idLec);";
-    $res=mysqli_query($connexion,$requete);
+    $requete = "INSERT INTO JOUER VALUES($idLec, $idV);";
+    $res = mysqli_query($connexion, $requete);
     mysqli_commit($connexion);
     return $res;
 }
@@ -1189,7 +1278,7 @@ function supprimer_chanson($connexion, $idC) // fonction à appeler
 //============== Nombre de chansons d'une Playlist ==========
 // fonction à appeler :
 function compte_chanson_playlist($connexion, $titreLec) {
-    $requete ="COUNT(v.idV) AS value_occurrence FROM LISTE_DE_LECTURE l NATURAL JOIN JOUER j NATURAL JOIN VERSION v 
+    $requete ="SELECT COUNT(v.idV) AS value_occurrence FROM LISTE_DE_LECTURE l NATURAL JOIN JOUER j NATURAL JOIN VERSION v 
 			   WHERE l.titreLec LIKE ".$titreLec." ;";
     $res = mysqli_query($connexion, $requete);
     return $res;
@@ -1197,10 +1286,10 @@ function compte_chanson_playlist($connexion, $titreLec) {
 //===== Nombre de genres voulus dans une Playlist =====
 // fonction à appeler :
 function compte_genre_playlist($connexion, $titreLec, $nom_genre) {
-    $requete ="COUNT(g.nom_genre) AS value_occurrence FROM LISTE_DE_LECTURE l NATURAL JOIN JOUER NATURAL JOIN VERSION 
-			   NATURAL JOIN INTERPRETER NATURAL JOIN CHANSON NATURAL JOIN POSSEDER NATURAL JOIN GENRE g
-			   WHERE l.titreLec LIKE ".$titreLec." 
-			   AND g.nom_genre LIKE ".$nom_genre." ;";
+    $requete ="SELECT COUNT(g.nom_genre) AS value_occurrence FROM LISTE_DE_LECTURE l NATURAL JOIN JOUER NATURAL JOIN VERSION 
+			   NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE g
+			   WHERE l.titreLec LIKE '$titreLec' 
+			   AND g.nom_genre LIKE %$nom_genre% ;";
     $res = mysqli_query($connexion, $requete);
     return $res;
 

@@ -14,7 +14,7 @@ h2{
 	<table>
 		<tr>
 		 <th> iD </th>
-		 <th> Titre de la Chanson </th>
+		 <th> Titre de la Version </th>
 		 <th> nom du Groupe </th>
 		 <th> Date </th>
 		 <th> numero_piste </th>

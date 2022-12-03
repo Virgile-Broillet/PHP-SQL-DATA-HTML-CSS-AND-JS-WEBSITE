@@ -24,7 +24,7 @@ if($album == null || count($album) == 0) {
 $CHANSONS_interpretees = get_last_songs_by_idC($connexion, 3);
 
 if(isset($_POST['boutonSuppr'])){
-	$nomChanson=$_POST["nomchanson"];
+	$nomChanson=$_POST['nomchanson'];
 	$idc = get_idC_By_titreC($connexion, $nomChanson);
 
 	if(empty($idc)){
@@ -33,8 +33,6 @@ if(isset($_POST['boutonSuppr'])){
 	}
 
 	$idV = get_idV_inter($connexion, $nomChanson);
-
-	print_r($idc); print_r($idV); print_r($nomChanson);
 
 	$del1=delete_ligne($connexion, 'idC', 'POSSÉDER', $idc);
 	$del2=delete_ligne($connexion, 'idV', 'INTERPRÉTER', $idV);
@@ -52,10 +50,10 @@ if(isset($_POST['boutonSuppr'])){
 	}else{
 		$message .= "erreur";
 	}
-	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=ajouter#'>";
+	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Nuggets-Musique/index.php?page=ajouter#'>";
 }
 
-if(isset($_POST['boutonValider'])) { // formulaire soumis
+if(isset($_POST['boutonValider'])) { // formulaire
 
 	if(empty($_POST['nomchanson']))
 	{
@@ -85,7 +83,7 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 
 	if(VERIF($nomChanson) or VERIF($chemin))
 	{
-		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=gifs'>";
+		echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Nuggets-Musique/index.php?page=gifs'>";
 	}else {
 
 		$last_id_song=get_Last_Id_Song($connexion);	
@@ -106,6 +104,7 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 			if($insertion_song && $insertion_poss && $insertion_version && $insertion_inter == TRUE) {
 				$message = "La Chanson $nomChanson a bien été ajoutée !";
 			}
+			echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Nuggets-Musique/index.php?page=ajouter#'>";
 		}
 		else {
 
@@ -121,9 +120,10 @@ if(isset($_POST['boutonValider'])) { // formulaire soumis
 			if($insertion_version2 && $insertion_inter2 == TRUE){
 				$message = "Une Chanson existe déjà avec ce nom ($nomChanson), une nouvelle version à été insérée.";
 			}
+
+			echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Nuggets-Musique/index.php?page=ajouter#'>";
 		}
 	}
-	echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=ajouter#'>";
 }
 
 ?>

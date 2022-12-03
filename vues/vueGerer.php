@@ -1,3 +1,4 @@
+
 <style>
 
 	h4{width:45em;}
@@ -28,13 +29,15 @@
 	</table>
 	
 <!-- DEBUT DE LA TABLE D'AFFICHAGE DES CONTENUS DE PLAYLISTS-->
-<table>
+
 <?php
 	if(isset($_POST['boutonChanson'])) 
 	{?>
+		<table>
 			</br></br>
 			<tr>
 				<th> Titre de la Chanson :</th>
+				<th> genre :</th>
 				<th> Playcount :</th>
 				<th> Skipcount :</th>
 				<th> Lastplayed :</th>
@@ -47,6 +50,9 @@
 				$idLec = get_chansons_playlist($connexion, 'idLec' ,$nomPlaylist);
 				setcookie('idLec', $idLec[0]);
 				setcookie('nomPlaylist', $nomPlaylist);
+				$nomgenre = $_COOKIE['genre1'];
+				print($nomgenre);
+				//$Tab_genre = get_genres_playlist($connexion ,$nomPlaylist);
 				$Tab_titre = get_chansons_playlist($connexion, 'titreC' ,$nomPlaylist);
 				$Tab_play = get_chansons_playlist($connexion, 'playcount' ,$nomPlaylist);
 				$Tab_skip = get_chansons_playlist($connexion, 'skipcount' ,$nomPlaylist);
@@ -59,10 +65,14 @@
 			<tr>
 				<?php for($i=0; $i<$nb; $i++){ 
 					$nombre = intval($Tab_last[$i]/1000);
-					if(empty($Tab_last[$i])||$Tab_last[$i]<1000){$valeur="Jouer Récemment (moins d'une seconde)";}
-						else{$valeur="Jouée il y a environ : ".$nombre." secondes";} ?>
+					if(empty($Tab_last[$i])||$Tab_last[$i]<1000){$valeur="Jouée Récemment ";}
+						else{$valeur="Jouée il y a environ : ".$nombre." secondes";} 
+
+					$genre_chanson = search_nom_genre($connexion, $Tab_titre[$i]);
+						?>
 						
 					<td><?= $Tab_titre[$i] ?></td>
+					<td><?= $genre_chanson[0] ?></td>
 					<td><?= $Tab_play[$i] ?></td>
 					<td><?= $Tab_skip[$i] ?></td>
 					<td><?= $valeur ?></td>
@@ -104,11 +114,21 @@
 
 		</br></br>
 	<?php } ?>
+
+	<?php
+		if(isset($_POST['boutonSupprimer'])) 
+		{
+			$nomChanson=$_POST['titreChanson'];
+			$idV=get_idV_inter($connexion, $nomChanson)[0];
+			$idLec =$_COOKIE['idLec'];
+		}
+	?>	
 	
 	<!-- COMPARAISON DES PLAYLISTS -->
 	<?php
 	if(isset($_POST['boutonComparer'])) 
 	{?>
+		<table>
 		</br></br>
 		<tr>
 			<th> Titre de la Playlist :</th>
@@ -158,10 +178,10 @@
 
 			<?php $nombre1 = intval($Tab_Jouer[0]/1000); 
 				if($Tab_Jouer[0]>1000){$valeur1 = "Jouée il y a environ ".$nombre1." secondes";}
-				else{$valeur1 = "Jouée très Récemment (moins d'une seconde)";}?>
+				else{$valeur1 = "Jouée très Récemment ( 0s )";}?>
 			<?php $nombre2 = intval($Tab_Jouer2[0]/1000); 
 				if($Tab_Jouer2[0]>1000){$valeur2 = "Jouée il y a environ ".$nombre2." secondes";}
-				else{$valeur2 = "Jouée très Récemment (moins d'une seconde)";}?>
+				else{$valeur2 = "Jouée très Récemment ( 0s )";}?>
 		
 			<tr>
 				<td><?= $nomPlaylist1 ?></td>
