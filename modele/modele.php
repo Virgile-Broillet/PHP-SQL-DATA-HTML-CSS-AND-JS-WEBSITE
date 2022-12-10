@@ -132,6 +132,20 @@ function deconnectBD($connexion) {
     mysqli_close($connexion);
 }
 
+
+// nombre de genres distincts dans la table genre
+function countInstances_genre($connexion) {
+    $requete = "SELECT COUNT(DISTINCT(nom_genre)) AS nb FROM GENRE";
+    $res = mysqli_query($connexion, $requete);
+    if($res != FALSE) {
+        $row = mysqli_fetch_assoc($res);
+        return $row['nb'];
+    }
+    return -1;  // valeur négative si erreur de requête
+}
+
+
+
 // nombre d'instances d'une table $nomTable
 function countInstances($connexion, $nomTable) {
     $requete = "SELECT COUNT(*) AS nb FROM $nomTable";
@@ -928,9 +942,6 @@ function SQL_TO_TAB($connexion, $nomGenre, $durée, $nb_ligne, $idLec ) //nb_lig
 }
 
 
-
-
-
 // COPIE POUR REUSSIR L'INSERTION DE VERSIONS AVEC DES ATTRIBUTS
 // DEFINIS POUR CREER UNE PLAYLIST
 function SQL_TO_TAB_PLAYLIST($connexion, $nomGenre, $durée, $nb_ligne, $idLec, $radio ) //nb_ligne est défini arbitrairement il sera incrémenté ou décrémenter dans GET_MOYENNE
@@ -941,30 +952,65 @@ function SQL_TO_TAB_PLAYLIST($connexion, $nomGenre, $durée, $nb_ligne, $idLec, 
     $TabIDA = array();
     $TabNUM_PISTE = array();
     $VERSION = '`VERSION`';
-								// $radio = le bouton radio
+	/*	
+	 * 		LE BOUTON RADIO SELECTIONNE PAR L'UTILISATEUR DANS VUEPLAYLIST EST RECUPERE ICI GRACE A LA VARIABLE $radio.
+	 * 		CETTE VARIABLE EST TRANSMISE A GET_MOYENNE_PLAYLIST POUR PERMETTRE DE RAPPELER A NOUVEAU SQL_TO_TAB_PLAYLIST CORRECTEMENT
+	 * 
+	 * 		--> IMPORTANT : DANS L'ENONCE IL N'EST PAS PRECISE QUE LES CHANSONS AJOUTEES A LA PLAYLIST DOIVENT NECESSAIREMENT RESPECTER LE GENRE
+	 * 		SAISI SI DES CONTRAINTES SUR LES VERSIONS SONT APPLIQUEES EN PLUS.
+	 * 		EN EFFET, LES QUESTIONS 5.3 et 5.2 SONT DISTINCTES.
+	 * 
+	 * 		TOUTEFOIS, NOUS AVONS LAISSE UN TRI SUR LE GENRE SI IL EST SPECIFIE, MAIS :
+	 * 			-> LE PRINCIPE DE LA REQUETE EST BASE SUR UN RAND() DES LIGNES EN RESULTAT, SI ON AJOUTE UN CHOIX SUR LES ATTRIBUTS DE VERSIONS
+	 * 				LE GENRE DEPENDRA DE LA QUANTITE DE CHANSONS DISPONIBLES AVEC CE GENRE
+	 * 
+	 * 						
+	 */ 
 	if($radio == 2){	
-		$VERSION = ' (SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE playcount > 15) v ';
-		
-	}elseif($radio == 3){	
-		$VERSION = ' (SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE skipcount <8 ) v ';
-		
-	}elseif($radio == 4){ 	
-		$VERSION = ' (SELECT * FROM `VERSION` NATURAL JOIN `DÉCRIRE` NATURAL JOIN `PROPRIÉTÉ` WHERE lastplayed < 100 || lastplayed IS NULL ) v ';
-		
-	}elseif($radio == 1){ 
-		$VERSION = ' VERSION ';// $radio vaudra toujours "VERSION" par défaut	
+		if($nomGenre=='Tous les genres ( au hasard )'){
+			//Si le nom de Genre est "Tous les genre ..." Alors ma fonction me rangera au hasard TOUTES les Musiques de tous genre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE playcount > 15) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}elseif($nomGenre=='Classical'){
+			//Si le nom de Genre est "Classical" Alors ma fonction me rangera au hasard TOUTES les Musiques dont le nom_genre contient le mot 'Classical'
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION  NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%Class%'  ) AND playcount > 15) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}else{
+			//Sinon, ma fonction me rangera au hasard TOUTEs les musiques dont le nom_genre contient le mot $nomGenre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION  NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%$nomGenre%'  ) AND playcount > 15 ) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}
+    }elseif($radio == 3){
+		 if($nomGenre=='Tous les genres ( au hasard )'){
+			//Si le nom de Genre est "Tous les genre ..." Alors ma fonction me rangera au hasard TOUTES les Musiques de tous genre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE skipcount <8 ) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}elseif($nomGenre=='Classical'){
+			//Si le nom de Genre est "Classical" Alors ma fonction me rangera au hasard TOUTES les Musiques dont le nom_genre contient le mot 'Classical'
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%Class%' ) AND skipcount <8) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}else{
+			//Sinon, ma fonction me rangera au hasard TOUTEs les musiques dont le nom_genre contient le mot $nomGenre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%$nomGenre%'  ) AND skipcount <8) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}	
+	}elseif($radio == 4){
+		 if($nomGenre=='Tous les genres ( au hasard )'){
+			//Si le nom de Genre est "Tous les genre ..." Alors ma fonction me rangera au hasard TOUTES les Musiques de tous genre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE ( lastplayed < 100 || lastplayed IS NULL )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}elseif($nomGenre=='Classical'){
+			//Si le nom de Genre est "Classical" Alors ma fonction me rangera au hasard TOUTES les Musiques dont le nom_genre contient le mot 'Classical'
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%Class%'  ) AND (lastplayed < 100 || lastplayed IS NULL )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}else{
+			//Sinon, ma fonction me rangera au hasard TOUTEs les musiques dont le nom_genre contient le mot $nomGenre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%$nomGenre%'  ) AND (lastplayed < 100 || lastplayed IS NULL )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}
+	}elseif($radio == 1){
+		if($nomGenre=='Tous les genres ( au hasard )'){
+			//Si le nom de Genre est "Tous les genre ..." Alors ma fonction me rangera au hasard TOUTES les Musiques de tous genre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}elseif($nomGenre=='Classical'){
+			//Si le nom de Genre est "Classical" Alors ma fonction me rangera au hasard TOUTES les Musiques dont le nom_genre contient le mot 'Classical'
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%Class%'  )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}else{
+			//Sinon, ma fonction me rangera au hasard TOUTEs les musiques dont le nom_genre contient le mot $nomGenre
+			$requete = "WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM PROPRIÉTÉ NATURAL JOIN DÉCRIRE NATURAL JOIN VERSION NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE '%$nomGenre%'  )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T";
+		}
 	} 
-		
-    if($nomGenre=='Tous les genres ( au hasard )'){
-        //Si le nom de Genre est "Tous les genre ..." Alors ma fonction me rangera au hasard TOUTES les Musiques de tous genre
-        $requete = 'WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY RAND()) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM '.$VERSION.' NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T';
-    }elseif($nomGenre=='Classical'){
-        //Si le nom de Genre est "Classical" Alors ma fonction me rangera au hasard TOUTES les Musiques dont le nom_genre contient le mot 'Classical'
-        $requete = 'WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY nom_genre) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM '.$VERSION.' NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE %Class% || nom_genre > Class )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T';
-    }else{
-        //Sinon, ma fonction me rangera au hasard TOUTEs les musiques dont le nom_genre contient le mot $nomGenre
-        $requete = 'WITH MyCte AS (SELECT ROW_NUMBER() OVER(ORDER BY nom_genre) AS IDPLACE, Durée, titreC, idV, idA, numero_piste FROM '.$VERSION.' NATURAL JOIN INTERPRÉTER NATURAL JOIN CHANSON NATURAL JOIN POSSÉDER NATURAL JOIN GENRE WHERE (nom_genre LIKE %$nomGenre% || nom_genre > $nomGenre )) SELECT * FROM (SELECT * FROM MyCte ORDER BY IDPLACE ASC LIMIT $nb_ligne)T';
-    }
 
     //préparation triviale de la requete ( triviale ? j'y crois pas haha ) 
     $prepare = mysqli_query($connexion, $requete);
@@ -986,9 +1032,34 @@ function SQL_TO_TAB_PLAYLIST($connexion, $nomGenre, $durée, $nb_ligne, $idLec, 
     array_pop($TabNUM_PISTE);
 
     //appel à la fonction GET_MOYENNE
-    GET_MOYENNE($TabDurée, $durée, $connexion, $nomGenre, $nb_ligne, $TabTitre, $idLec, $TabIDV, $TabIDA, $TabNUM_PISTE);
+    GET_MOYENNE_PLAYLIST($TabDurée, $durée, $connexion, $nomGenre, $nb_ligne, $TabTitre, $idLec, $TabIDV, $TabIDA, $TabNUM_PISTE, $radio);
 }
 
+//retourne la durée de la playlist et incrémente ou non le nb de ligne si cela est necessaire
+function GET_MOYENNE_PLAYLIST($TabDurée, $temps, $connexion, $nomGenre, $nb_ligne, $TabTitre, $idLec, $TabIDV, $TabIDA, $TabNUM_PISTE, $radio) //variables précédemment définis dans SQL_TO_TAB
+{
+    //definition du temps minimum d'une playlist
+    $temps_min = $temps-50;
+    //définition de la moyenne 
+    $moyenne=0;
+    $i=1;
+    while($i != $nb_ligne) //tant que $i n'est pas égal au nombre de ligne 
+    {
+        $moyenne = $moyenne+$TabDurée[$i-1]; //la moyenne est égal à la moyenne + Les durées stoquées dans le Tab TabDurée alimenté dans SQL_TO_TAB_PLAYLIST ou SQL_TO_TAB
+        $i=$i+1; //incrémentation de la boucle
+    }
+    if($moyenne>$temps) // si la moyenne des temps des musiques aléatoire est supérieur au temps saisie par l'utilisateur
+    {
+		
+        return SQL_TO_TAB_PLAYLIST($connexion, $nomGenre, $temps, $nb_ligne-1, $idLec, $radio); //on rappel la fonction SQL_TO_TAB en enlevant une musique (et en regénérant un tableau au hasard)
+    }elseif($moyenne<$temps_min)// si la moyenne des temps des musiques aléatoire est inférieur au temps minimum de la playlist calculer plus haut
+    {
+		
+        return SQL_TO_TAB_PLAYLIST($connexion, $nomGenre, $temps, $nb_ligne+1, $idLec, $radio); //on rappel la fonction SQL_TO_TAB en ajoutant une musique (et en regénérant un tableau au hasard)
+    }else{  // si la moyenne est comprise entre le temps_min et la durée saisie par l'utilisateur
+        insertJouer_AND_insertInclure($connexion, $TabIDV, $nb_ligne, $idLec, $TabIDA, $TabNUM_PISTE, $radio); //on insère JOUER et INCLURE dans la BD avec les informations sur les Musiques des Playlists
+    }
+}
 
 
 

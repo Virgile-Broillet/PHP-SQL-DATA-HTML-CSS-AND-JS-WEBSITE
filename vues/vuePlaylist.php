@@ -167,21 +167,6 @@ h5{
 				}elseif($radio_test == 'Toutes'){$radio=1; $afficher1 = "OUI";} // par défaut 
 				}
 			//else{$radio = " VERSION ";}// par défaut (pour être sûr )
-
-	/*
-		if(!isset($_COOKIE['titre'])){
-			setcookie('titre', $titreLec );
-			setcookie('temps', $temps );
-			setcookie('genre', $nomGenre );
-			
-			setcookie('radio', $radio_test );
-			 }else{
-			$titreLec=var_dump($COOKIE['titre']); 
-			$temps=var_dump($COOKIE['temps']);
-			$nomGenre=var_dump($COOKIE['genre']);
-		
-			$radio_test=var_dump($COOKIE['radio']);
-			 }*/
 			
 			if($verification == FALSE || count($verification) == 0) 
 			{ // pas de Playlist avec ce nom, insertion
@@ -200,7 +185,6 @@ h5{
 			else {
 				$message = "Une Playlist existe déjà avec ce nom ($titreLec).";
 			}
-			//echo "<META HTTP-EQUIV='Refresh' CONTENT='0;URL=https://bdw.univ-lyon1.fr/p2103804/Playlist-Watcher/index.php?page=playlist#'>";
 		} ?>
 	
 				<!-- AFFICHAGE DE LA PLAYLIST AJOUTEE -->
@@ -305,7 +289,7 @@ h5{
 		<?php if($_POST['genre1'] !="Tous les genres ( au hasard )")
 				{?>
 		<h5>
-			Il Y A <?=$genres_respectes ?> Genres respectés parmi <?=count($Tab_titre)  //compte_chanson_playlist($connexion, $titreLec)?> Chansons ajoutées. 
+			Il Y A <?=$genres_respectes ?> Genres respectés parmi <?=count($Tab_titre)?> Chansons ajoutées. 
 		</h5>
 		
 		<?php } ?> <!-- FIN DU BOUTON AJOUT-->

@@ -32,6 +32,10 @@
 			<div class="gauche"><h5>Nombre de chansons :  <?=  countInstances($connexion, 'CHANSON') ?></h5></div>
 			<div class="droite"><h5>Nombre de groupes :  <?=  countInstances($connexion, 'GROUPE') ?> </h5></div>
 			</br></br>
+			<h5>Genres disponibles:  </h5>
+			<?=countInstances_genre($connexion)?> genres
+			</br></br>
+			
 			<h5>Chansons avec le meilleur Playcount:  </h5>
 			
 			<?php  $tab = max_playcount($connexion);?>

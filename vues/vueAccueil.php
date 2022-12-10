@@ -150,12 +150,16 @@
 				  directement dans la Base de données. Notre formulaire s'auto-actualise et contient
 				  des paramètres pré-remplis, afin d'être facile d'utilisation. 				
 			</br>Notre formulaire est protégé contre les injections SQL, afin de protéger les données.
+			</br>Essayez pour voir . . .
 			</br> </br> 
 		</td>
 		<td>
+			</br>
 			<li> DEUXIEME FONCTIONALITE </li></br>
 			 Pour l'importation du jeu de données, nous avons des fonctions remplissant la Base de Données automatiquement depuis le modèle.
 			 Un maximum de tables ont été importées.
+			 Le diagramme E/A nous a permi de mieux organiser le remplissage des tables. Toutes ne sont pas remplies malheureusement par manque de
+			 contenu dans le dataset songs2000. Nous avons fait de notre mieux !
 			</br> </br> 
 		</td> 
 		<td>
@@ -167,6 +171,7 @@
 			</br></br>
 		</td>
 		<td>
+			</br>
 			<li> QUATRIEME FONCTIONALITE </li></br>
 			  La Gestion des Listes de Lectures Permet en tout d'afficher, comparer, modifier et ajouter
 				  des Playlists et leur Contenu. 
