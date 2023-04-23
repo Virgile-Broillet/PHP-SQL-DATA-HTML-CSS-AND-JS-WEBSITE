@@ -395,7 +395,7 @@ function last_played($connexion){
     return $res;
 }
 
-//==============( Fonctionq utiles das VUE AJOUTER et dans l'AFFICHAGE )===========================
+//==============( Fonctions utiles das VUE AJOUTER et dans l'AFFICHAGE )===========================
 
 // retourne les informations sur la chanson nommée $nomChanson
 function getSongByName($connexion, $nomChanson) {
